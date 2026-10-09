@@ -36,7 +36,8 @@ with open(os.environ['MXL_SETTINGS'], 'w', encoding='utf-8') as f:
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 from paths import BACKUP_DIR
-bak_glob = lambda path: os.path.join(BACKUP_DIR, glob.escape(os.path.basename(path)) + '.bak-*')   # sauvegardes d'un fichier
+from mxl_save import backup_name
+bak_glob = lambda path: os.path.join(BACKUP_DIR, glob.escape(backup_name(path)) + '.bak-*')   # sauvegardes d'un fichier
 import mxl_game   # jeu considéré fermé pendant les tests (écritures permises même si Median XL est ouvert)
 mxl_game.running_processes = lambda: []
 sys.argv = sys.argv[:2]

@@ -33,6 +33,16 @@ def editor():
     return _editor
 
 
+def editor_error():
+    """Erreur du module s'il est présent mais ne se charge pas (« Type: message »), sinon None : vérifié au lancement
+    pour l'afficher à l'écran (l'exécutable n'a pas de console ; audit du 09/10)."""
+    try:
+        editor()
+    except Exception as e:
+        return f'{type(e).__name__}: {e}'
+    return None
+
+
 def hook(name):
     """Point d'accroche name du module (fonction), ou None si le module est absent ou ne le définit pas."""
     ed = editor()

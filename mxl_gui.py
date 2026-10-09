@@ -37,7 +37,7 @@ import settings
 from mxl_library import Library, catalog, slot_key
 from paths import DATA_DIR, SAVE_DIR, LIBRARY_FILE as PATHS_LIBRARY_FILE
 from mxl_home import migrate
-from mxl_ext import editor, hook
+from mxl_ext import editor, editor_error, hook
 from i18n import tr
 from mxl_theme import DETAIL_BG, DETAIL_FG, FONT, DETAIL_WIDTH, DETAIL_PADX, LABEL_DIM
 from mxl_gui_install import GameInstall
@@ -870,6 +870,12 @@ def main():
     if migrate():
         i18n.set_language(settings.get('language', i18n.DEFAULT), save=False)
     root = ttk.Window(themename='darkly')
+    error = editor_error()
+    if error:   # module complémentaire présent mais cassé : message à l'écran plutôt qu'une fermeture muette
+        root.withdraw()
+        messagebox.showerror(tr('err.editor.title'), tr('err.editor', error=error), parent=root)
+        root.destroy()
+        sys.exit(1)
     app = App(root, sys.argv[1] if len(sys.argv) > 1 else None)
     if os.environ.get('MXL_EXIT_AFTER'):   # essai de l'exécutable (build_exe.py) : fermeture normale après n ms
         root.after(int(os.environ['MXL_EXIT_AFTER']), app.on_close)

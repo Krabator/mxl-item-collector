@@ -13,6 +13,7 @@ Objet de chaque ligne (nom, icône) : orb_item. Explication au survol (orb_toolt
 Effets : ceux de la table actuelle ; un objet garde les valeurs du jour de l'application (✅ Soul Track : Idol of Stars
 +14 Force / Dextérité, Periapt of Life +10 vie par seconde, contre +13 et +40 aujourd'hui).
 """
+import math
 from itertools import product
 from mxl_theme import WHITE, GREY
 
@@ -26,6 +27,10 @@ ORB_NAME_COLOR = 'o'   # nom d'un orbe : orange de la capture en jeu (mxl_theme.
 CATEGORY_ICON = {11655: 'orb_weap', 11656: 'orb_armo', 11657: 'orb_misc', 11658: 'orb_any'}
 GENERIC, NAMED, SOULFORGED = range(48), range(48, 79), (*range(79, 93), 97, 98)
 NAMED_ROWS = (*NAMED, 93, 94, 95, 96, 99, 100)   # lignes des orbes à objet propre (nom en deux lignes)
+# combinaisons essayées au plus pour démêler un groupe d'orbes verrouillés (applied_orbs) : objets réels très en
+# dessous (3 Imperfect Spheres posées 1 fois : 8) ; au-delà (compteurs anormaux, fichier abîmé) : groupe donné
+# ensemble, sans gel de l'affichage (audit du 09/10)
+MAX_COMBINATIONS = 100_000
 
 
 def orb_item(k, data):
@@ -203,6 +208,9 @@ def applied_orbs(it, data):
             out.append(((group[0],), counts[group[0]]))
             continue
         lock = {(q, p): v for q in group for p, v in orbs[q]['locks'] if p in group}
+        if math.prod(counts[p] + 1 for p in group) > MAX_COMBINATIONS:
+            out.append((tuple(group), max(counts[p] for p in group)))
+            continue
         sols = [a for a in product(*(range(counts[p] + 1) for p in group))
                 if all(a[i] + sum(a[j] * lock.get((q, p), 0) for j, q in enumerate(group)) == counts[p]
                        for i, p in enumerate(group))]

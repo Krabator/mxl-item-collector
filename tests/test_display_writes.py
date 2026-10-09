@@ -1,6 +1,6 @@
 """Tests : affichage (instantanés des deux coffres de référence, dans chaque langue livrée), scénario de déplacements,
 écriture sûre et erreurs de format."""
-import io, json, os, hashlib, contextlib
+import io, json, os, shutil, hashlib, contextlib
 from common import case, STASH, STASH2, FIXTURES, LANGUAGES
 import i18n
 from mxl_save import parse_stash, character_for, move_item, commit_file, EditError
@@ -153,6 +153,27 @@ def ethereal_base_values(ctx):
     base = [''.join(t for _, t in l) for l in item_tooltip(dict(weapon, ethereal=True), data)
             if ''.join(t for _, t in l).startswith('One-Hand Base Damage')]
     ctx.expect('dégâts de base éthérés', base, [f'One-Hand Base Damage: {a * 5 // 4} to {b * 5 // 4}'])
+
+
+@case('Écriture', 'sauvegardes : deux fichiers de même nom dans deux dossiers gardent chacun la leur (audit du 09/10)')
+def backup_same_name(ctx):
+    from mxl_save import make_backup, backup_name
+    from paths import SAVE_DIR
+    a, b = os.path.join(ctx.tmp, 'a'), os.path.join(ctx.tmp, 'b')
+    for d in (a, b):
+        os.makedirs(d)
+        shutil.copy2(STASH, d)
+    first = make_backup(os.path.join(a, 'Nekratall.stash'))
+    second = make_backup(os.path.join(b, 'Nekratall.stash'))
+    again = make_backup(os.path.join(a, 'Nekratall.stash'))   # 2e sauvegarde du même fichier : la 1re est retirée
+    ctx.expect('sauvegardes gardées', (os.path.exists(first), os.path.exists(second), os.path.exists(again)),
+               (False, True, True))
+    ctx.check(os.path.basename(second).split('.bak-')[0] != os.path.basename(again).split('.bak-')[0],
+              f'même nom de sauvegarde : {second} / {again}')
+    ctx.expect('fichier du dossier des sauvegardes du jeu : nom inchangé',
+               backup_name(os.path.join(SAVE_DIR, 'Kalidor.stash')), 'Kalidor.stash')
+    for f in (second, again):
+        os.remove(f)
 
 
 @case('Écriture', 'stat absente des tables : erreur explicite (stat et objet)')

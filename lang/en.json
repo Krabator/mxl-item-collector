@@ -108,6 +108,8 @@
   "err.format": "unexpected file structure: '{expected}' expected at byte {pos}",
   "err.verify": "check after writing failed: the file was not modified",
   "err.game_running": "Median XL is running ({exe}).\n\nClose the game before modifying the stash: the game keeps the stash in memory and would overwrite the editor's changes when it closes.",
+  "err.editor.title": "Add-on module error",
+  "err.editor": "The add-on module (mxl_editor) is present but could not be loaded:\n{error}\n\nRepair or remove the mxl_editor folder to start the application.",
   "err.protected": "{file}\n\nis inside the editor's folder (test copy): it is never modified. Open your stash from the game's save folder.",
   "err.unknown_stat": "unknown stat {stat}: the game tables in data/ may be out of date (re-run extract_data.py after a Median XL update)",
   "err.truncated": "stat list without end marker: the item is not read correctly (unknown format)",

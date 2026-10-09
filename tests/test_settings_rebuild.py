@@ -85,6 +85,31 @@ def settings_rights(ctx):
         ctx.expect('rien écrit ni retiré', settings.load(), {'language': 'en', 'edition_enabled': True})
 
 
+@case('Réglages', 'module complémentaire cassé : erreur lisible pour le message au lancement ; absent : aucune (audit du 09/10)')
+def editor_broken(ctx):
+    import sys
+    import mxl_ext
+    pkg = os.path.join(ctx.tmp, 'mxl_broken_editor')
+    os.makedirs(pkg)
+    with open(os.path.join(pkg, '__init__.py'), 'w', encoding='utf-8') as f:
+        f.write('import mxl_module_qui_n_existe_pas\n')
+    saved = mxl_ext.EDITOR_MODULE, mxl_ext._editor
+    no_editor = os.environ.pop('MXL_NO_EDITOR', None)   # campagne --base : module de test chargé quand même
+    sys.path.insert(0, ctx.tmp)
+    try:
+        mxl_ext.EDITOR_MODULE, mxl_ext._editor = 'mxl_broken_editor', False
+        ctx.expect('module cassé', mxl_ext.editor_error(),
+                   "ModuleNotFoundError: No module named 'mxl_module_qui_n_existe_pas'")
+        mxl_ext.EDITOR_MODULE, mxl_ext._editor = 'mxl_module_absent', False
+        ctx.expect('module absent', (mxl_ext.editor_error(), mxl_ext.editor()), (None, None))
+    finally:
+        sys.path.remove(ctx.tmp)
+        sys.modules.pop('mxl_broken_editor', None)
+        mxl_ext.EDITOR_MODULE, mxl_ext._editor = saved
+        if no_editor is not None:
+            os.environ['MXL_NO_EDITOR'] = no_editor
+
+
 @case('Réglages', "traductions : langues livrées + dossier lang/ de l'utilisateur (ajout, remplacement)")
 def extra_languages(ctx):
     """Dossier livré (en, fr) et dossier à côté de l'exécutable (fr corrigé, nouvelle langue « xx », fichier abîmé) :

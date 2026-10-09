@@ -9,7 +9,7 @@ import mxl_game
 from i18n import tr
 from mxl_format import BitReader, Character, FormatError, read_item_list, write_bits, expect
 # dossier du programme (sources ou exécutable) : les coffres qui s'y trouvent (tests/fixtures) ne sont jamais modifiés
-from paths import APP_DIR as PROJECT_DIR, BACKUP_DIR
+from paths import APP_DIR as PROJECT_DIR, BACKUP_DIR, SAVE_DIR
 from mxl_containers import STASH, SHARED_BOX, PANELS, HORADRIC_CUBE, character_containers, place, placed
 
 
@@ -110,20 +110,32 @@ def commit_file(path, content, verify, backup=True):
     return bak
 
 
+def backup_name(path):
+    """Nom des sauvegardes d'un fichier du jeu dans BACKUP_DIR : son nom (fichier du dossier des sauvegardes du jeu) ;
+    fichier rangé ailleurs (copie d'un coffre…) : son nom suivi de « @ » et d'un code de 6 caractères tiré de son
+    dossier, pour que deux fichiers de même nom n'effacent jamais leurs sauvegardes l'un l'autre (audit du 09/10)."""
+    import hashlib
+    name = os.path.basename(path)
+    folder = os.path.normcase(os.path.abspath(os.path.dirname(path)))
+    if folder == os.path.normcase(os.path.abspath(SAVE_DIR)):
+        return name
+    return f"{name}@{hashlib.md5(folder.encode('utf-8')).hexdigest()[:6]}"
+
+
 def make_backup(path):
-    """Copie horodatée <nom du fichier>.bak-AAAAMMJJ-HHMMSS dans le dossier des sauvegardes de l'utilisateur
+    """Copie horodatée <backup_name>.bak-AAAAMMJJ-HHMMSS dans le dossier des sauvegardes de l'utilisateur
     (paths.BACKUP_DIR, dossier unique : décision du 08/10 ; avant : à côté du fichier), puis suppression des
     sauvegardes horodatées plus anciennes du même fichier : seule la dernière est conservée. Les sauvegardes nommées
     autrement (ex. « .bak-avant-shark ») ne sont jamais supprimées. Renvoie le chemin de la sauvegarde."""
     import shutil, time, re, glob
     os.makedirs(BACKUP_DIR, exist_ok=True)
-    base = os.path.join(BACKUP_DIR, os.path.basename(path))
+    base = os.path.join(BACKUP_DIR, backup_name(path))
     bak = base + time.strftime('.bak-%Y%m%d-%H%M%S')
     n = 1
     while os.path.exists(bak):
         n += 1; bak = base + time.strftime('.bak-%Y%m%d-%H%M%S') + f'-{n}'
     shutil.copy2(path, bak)
-    pat = re.compile(re.escape(os.path.basename(path)) + r'\.bak-\d{8}-\d{6}(-\d+)?$')
+    pat = re.compile(re.escape(os.path.basename(base)) + r'\.bak-\d{8}-\d{6}(-\d+)?$')
     for old in glob.glob(glob.escape(base) + '.bak-*'):
         if old != bak and pat.fullmatch(os.path.basename(old)):
             os.remove(old)

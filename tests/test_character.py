@@ -407,7 +407,12 @@ def mystic_orbs(ctx):
     ctx.expect('objet ordinaire', orb_lines(counters({3: 2, 18: 1}), data)[0], 'Mystic Orbs applied \u2014 3 orbs')
     quad = counters({3: 1})
     quad['stats'].append({'id': 289, 'param': None, 'value': 4})
-    ctx.expect('quadruplé', orb_lines(quad, data)[0], 'Mystic Orbs applied (effects quadrupled) \u2014 1 orbs')
+    # compteurs anormaux (fichier abîmé) : groupe verrouillé donné ensemble, sans gel (audit du 09/10)
+    import time
+    start = time.perf_counter()
+    found = applied_orbs(counters({94: 500, 95: 500, 96: 500}), data)
+    ctx.expect('compteurs anormaux', (found, time.perf_counter() - start < 1), (([((94, 95, 96), 500)], 1), True))
+    ctx.expect('quadruplé', orb_lines(quad, data)[0],'Mystic Orbs applied (effects quadrupled) \u2014 1 orbs')
 
 
 @case('Personnage', 'Mystic Orb au survol : comme son infobulle en jeu (Crystal of Tears), wiki officiel (orbes uniques)')
