@@ -35,9 +35,7 @@ Still, keep your own copy of your save folder before trying a new tool.
 
 ### Windows executable
 
-Download the latest release, unzip it anywhere and run `MXL Item Collector.exe`. On first launch, choose your
-Median XL installation folder: the game tables and icons are extracted from it (nothing from the game is shipped
-with this tool).
+Coming later. For now, run from source (see below).
 
 ### From source
 
@@ -47,6 +45,9 @@ Requires Windows and Python 3.10 or later.
 pip install ttkbootstrap pillow
 python mxl_gui.py
 ```
+
+On first launch, choose your Median XL installation folder: the game tables and icons are extracted from it
+(nothing from the game is shipped with this tool).
 
 To build the executable: `pip install pyinstaller`, then `python build_exe.py` (result in `dist/`).
 
