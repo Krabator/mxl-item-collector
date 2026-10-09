@@ -26,7 +26,7 @@ Unofficial fan tool, not affiliated with the Median XL team or Blizzard Entertai
   variable stat (`+52% Enhanced Damage [40-60]`) and where each value comes from (base, runeword, jewels, Mystic Orbs).
 - **Item quality**: a single percentage per item, weighted by the stats you care about (priorities you can set per
   item type).
-- **Library**: the full catalog of unique items (tiered, sacred, SSU, SSSU…) and set items, with search, filters,
+- **Library**: the full catalog of unique items (tiered, SU, SSU, SSSU…) and set items, with search, filters,
   drop information and the items you have already discovered.
 - **Collection**: store the best copy of each item (normal and ethereal kept apart), compare new finds automatically,
   take items back out when you need them; separate storage for good superior bases.

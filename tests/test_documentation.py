@@ -159,7 +159,8 @@ def tiered_uniques(ctx):
 
 @case('Documentation', 'page « Sacred Uniques » : infobulles identiques au site (tous les uniques Sacred)')
 def sacred_uniques(ctx):
-    check_page(ctx, 'sacreduniques', lambda e: e['kind'] == 'unique' and e['base'].endswith('(Sacred)'))
+    check_page(ctx, 'sacreduniques', lambda e: e['kind'] == 'unique' and (e['base'].endswith('(Sacred)')
+                                                                          or e['family'] in ('sacred', 'ssu', 'sssu')))
 
 
 @case('Documentation', 'page « Sets » : infobulles identiques au site (tous les objets de set)')

@@ -30,10 +30,15 @@ from mxl_save import (check_game_closed, read_file, read_items, ItemFile, item_b
 CATEGORIES = ('weapons', 'armor', 'jewelry', 'charm', 'jewel', 'relic', 'other')   # ordre d'affichage
 # familles (filtre « Type » de l'écran Library) : uniques à tiers (base « (1) » à « (4) »), uniques Sacred par niveau
 # d'objet (un unique ne tombe que d'un niveau de zone / monstre au moins égal) : SU 105 (zones 104+), SSU 120 (119+),
-# SSSU 130 (130+) d'après la page officielle « Sacred Uniques » (✅ niveaux identiques au site pour 380 uniques) ; autres
-# uniques (bijoux, charmes, quêtes, Sacred qui ne tombent pas) ; objets de set
+# SSSU 130 (130+) d'après la page officielle « Sacred Uniques » (✅ niveaux identiques au site pour 380 uniques) ;
+# anneaux, amulettes, joyaux et carquois sacrés classés de même par niveau d'objet (09/10 : ✅ game feed du Discord de
+# Median XL, Signet of the Gladiator 120 « SSU », Jewel of Luck et Arkenstone 130 « SSSU ») ; autres uniques (charmes,
+# reliques, quêtes, bijoux ordinaires, Sacred qui ne tombent pas) ; objets de set
 FAMILIES = ('tiered', 'sacred', 'ssu', 'sssu', 'other', 'set')
-SSU_LEVEL, SSSU_LEVEL = 120, 130
+SU_LEVEL, SSU_LEVEL, SSSU_LEVEL = 105, 120, 130
+# types d'objet des bijoux, joyaux et carquois sacrés (« The best rings, amulets, jewels and quivers are also marked as
+# sacred uniques », page officielle) : uniques qui peuvent tomber, de niveau d'objet SU_LEVEL ou plus
+SACRED_JEWELRY_TYPES = frozenset(('ring', 'amul', 'jewl', 'bowq', 'xboq'))
 
 
 def _category(code, name, data):
@@ -101,7 +106,8 @@ def catalog(data):
                             # niveau requis : le plus grand de l'unique / objet de set et de son objet de base, comme le
                             # jeu (D2Common.dll 0x6fd7652d ; ✅ Mendeln's Companion T1 : 4 et Spirit Edge (1) 5 -> 5)
                             level_req=max(r.get('level_req') or 0, data.base(r['code']).level_req),
-                            family=family(kind, base, r.get('level'), droppable)))
+                            family=family(kind, base, r.get('level'), droppable,
+                                          item_type_codes(dict(code=r['code']), data))))
     return out
 
 
@@ -114,16 +120,18 @@ def base_tier(base_name):
     return m.group(1).lower() if m else None
 
 
-def family(kind, base, level, droppable):
+def family(kind, base, level, droppable, types=()):
     """Famille d'une entrée (FAMILIES) : 'set' ; unique 'tiered' (objet de base à tiers « (1) » à « (4) ») ; unique
-    Sacred qui peut tomber : 'sssu' (niveau d'objet 130 et plus), 'ssu' (120 et plus), sinon 'sacred' (105, et les
-    rares 80 à 110) ; autres uniques : 'other' (bijoux, charmes, reliques, quêtes, Sacred qui ne tombent pas)."""
+    Sacred qui peut tomber : 'sssu' (niveau d'objet 130 et plus), 'ssu' (120 et plus), sinon 'sacred' (SU : 105, et
+    les rares 80 à 110) ; anneau, amulette, joyau ou carquois unique (types : types de l'objet de base,
+    SACRED_JEWELRY_TYPES) qui peut tomber, de niveau 105 ou plus : mêmes seuils ; autres uniques : 'other' (charmes,
+    reliques, quêtes, bijoux de niveau plus bas, Sacred qui ne tombent pas)."""
     if kind == 'set':
         return 'set'
     if re.search(r'\([1-4]\)$', base):
         return 'tiered'
-    if base.endswith('(Sacred)') and droppable:
-        level = level or 0
+    level = level or 0
+    if droppable and (base.endswith('(Sacred)') or (SACRED_JEWELRY_TYPES & set(types) and level >= SU_LEVEL)):
         return 'sssu' if level >= SSSU_LEVEL else 'ssu' if level >= SSU_LEVEL else 'sacred'
     return 'other'
 

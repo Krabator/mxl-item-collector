@@ -860,7 +860,9 @@ def catalog_families(ctx):
     """Famille de chaque entrée : base « (1) » à « (4) » = Tiered ; base « (Sacred) » qui peut tomber, par niveau
     d'objet (page officielle « Sacred Uniques » : SU 105, SSU 120, SSSU 130) ; Sacred qui ne tombe pas, bijoux… =
     autres. Exemples relevés sur le site : Witherfang 130 (SSSU, placé au centre de son tableau mais niveau 130),
-    Herald of Pestilence 120 (SSU), The Xiphos 105 (SU)."""
+    Herald of Pestilence 120 (SSU), The Xiphos 105 (SU). Anneaux, amulettes, joyaux et carquois sacrés (niveau 105 ou
+    plus, qui tombent) : mêmes seuils (✅ game feed du Discord de Median XL, 09/10 : Signet of the Gladiator « SSU »,
+    Jewel of Luck et Arkenstone « SSSU ») ; plus bas (Witchmoon 100), charmes de boss : autres."""
     from collections import Counter
     from mxl_library import FAMILIES
     cat = catalog(ctx.data)
@@ -869,9 +871,14 @@ def catalog_families(ctx):
                             fam('Witherfang', 'Flail (Sacred)'), fam('Void-Infused', 'Maple Bow (Sacred)'),
                             fam("Jared's Fragmentor", 'Claymore (3)')],
                ['sacred', 'ssu', 'sssu', 'other', 'tiered'])
+    ctx.expect('bijoux, joyaux, carquois', [fam('Signet of the Gladiator', 'Ring'), fam('Jewel of Luck', 'Jewel'),
+                                            fam('Arkenstone', 'Jewel'), fam('Earth Rouser', 'Ring'),
+                                            fam('Bag of Tricks', 'Arrow Quiver'), fam('Witchmoon', 'Amulet'),
+                                            fam("Skinrender's Ear", "Skinrender's Ear")],
+               ['ssu', 'sssu', 'sssu', 'sacred', 'ssu', 'other', 'other'])
     counts = Counter(e['family'] for e in cat)
     ctx.expect('toutes les familles présentes', sorted(counts) == sorted(FAMILIES), True)
-    ctx.expect('Sacred par niveau', (counts['sacred'], counts['ssu'], counts['sssu']), (193, 171, 22))
+    ctx.expect('Sacred par niveau', (counts['sacred'], counts['ssu'], counts['sssu']), (212, 198, 27))
 
 
 @case('Bibliothèque', "explication d'une compétence : coût en mana de Median XL (format 77, Mana Cost of Skills)")
