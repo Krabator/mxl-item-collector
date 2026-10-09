@@ -6,6 +6,18 @@ around safely.
 
 Unofficial fan tool, not affiliated with the Median XL team or Blizzard Entertainment.
 
+![Main window: character, stash and item tooltip with roll ranges](docs/screenshots/main-window.jpg)
+
+## Screenshots
+
+| Library and collection | Transfer to the collection |
+| --- | --- |
+| ![Library: catalog, collection progress and stored copy](docs/screenshots/library.jpg) | ![Transfer: best copies stored, worse ones kept or destroyed](docs/screenshots/transfer.jpg) |
+
+| Skill explanation on hover |
+| --- |
+| ![Skill tooltip on hover](docs/screenshots/skill-hover.jpg) |
+
 ## Features
 
 - **Stashes and characters**: personal stash, shared stash, Horadric Cube, inventory, worn items and mercenary,
