@@ -862,9 +862,10 @@ def catalog_families(ctx):
     autres. Exemples relevés sur le site : Witherfang 130 (SSSU, placé au centre de son tableau mais niveau 130),
     Herald of Pestilence 120 (SSU), The Xiphos 105 (SU). Anneaux, amulettes, joyaux et carquois sacrés (niveau 105 ou
     plus, qui tombent) : mêmes seuils (✅ game feed du Discord de Median XL, 09/10 : Signet of the Gladiator « SSU »,
-    Jewel of Luck et Arkenstone « SSSU ») ; plus bas (Witchmoon 100), charmes de boss : autres."""
+    Jewel of Luck et Arkenstone « SSSU ») ; plus bas (Witchmoon 100) : à tiers, sans tier (page « Tiered Uniques ») ;
+    charmes de boss : autres."""
     from collections import Counter
-    from mxl_library import FAMILIES
+    from mxl_library import FAMILIES, entry_tier
     cat = catalog(ctx.data)
     fam = lambda name, base: next(e['family'] for e in cat if e['name'] == name and e['base'] == base)
     ctx.expect('exemples', [fam('The Xiphos', 'Short Sword (Sacred)'), fam('Herald of Pestilence', 'Angel Star (Sacred)'),
@@ -875,7 +876,16 @@ def catalog_families(ctx):
                                             fam('Arkenstone', 'Jewel'), fam('Earth Rouser', 'Ring'),
                                             fam('Bag of Tricks', 'Arrow Quiver'), fam('Witchmoon', 'Amulet'),
                                             fam("Skinrender's Ear", "Skinrender's Ear")],
-               ['ssu', 'sssu', 'sssu', 'sacred', 'ssu', 'other', 'other'])
+               ['ssu', 'sssu', 'sssu', 'sacred', 'ssu', 'tiered', 'other'])
+    tier = lambda name, base: next(entry_tier(e) for e in cat if e['name'] == name and e['base'] == base)
+    ctx.expect('tiers', [tier('Hangman', 'Amulet'), tier('Locust Hive', 'Arrow Quiver'), tier('The Boulder', 'Jewel'),
+                         tier("Jared's Fragmentor", 'Claymore (3)'), tier('Earth Rouser', 'Ring')],
+               ['jewelry', 'jewelry', 'jewelry', '3', None])
+    ctx.expect('bijoux, joyaux et carquois à tiers', sum(1 for e in cat if entry_tier(e) == 'jewelry'), 40)
+    # catégorie Quiver (09/10) : carquois de flèches et de carreaux, à tiers ou SSU
+    quivers = sorted({(e['name'], e['family']) for e in cat if e['category'] == 'quiver'})
+    ctx.expect('carquois', (len(quivers), quivers[:2], {f for _, f in quivers}),
+               (11, [("Auriel's Satchel", 'ssu'), ('Bag of Tricks', 'ssu')], {'ssu', 'tiered'}))
     counts = Counter(e['family'] for e in cat)
     ctx.expect('toutes les familles présentes', sorted(counts) == sorted(FAMILIES), True)
     ctx.expect('Sacred par niveau', (counts['sacred'], counts['ssu'], counts['sssu']), (212, 198, 27))

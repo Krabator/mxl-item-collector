@@ -301,6 +301,11 @@ def library():
         w.kind_box.set(f'Tier {t} Uniques'); w.kind_box.event_generate('<<ComboboxSelected>>'); root.update()
         want = sorted(k for k, e in app.catalog.items() if e['family'] == 'tiered' and e['base'].endswith(f'({t})'))
         check(want and sorted(w.item_iids()) == want, f'filtre Tier {t} Uniques : {len(w.item_iids())} / {len(want)}')
+    # bijoux, joyaux et carquois à tiers (sans tier) ; libellé entier visible dans la liste déroulante
+    w.kind_box.set('Tiered jewelry & quivers'); w.kind_box.event_generate('<<ComboboxSelected>>'); root.update()
+    want = sorted(k for k, e in app.catalog.items() if e['family'] == 'tiered' and not e['base'].endswith(('(1)', '(2)', '(3)', '(4)')))
+    check(len(want) == 40 and sorted(w.item_iids()) == want, f'filtre Tiered jewelry & quivers : {len(w.item_iids())} / {len(want)}')
+    check(int(str(w.kind_box.cget('width'))) >= len('Tiered jewelry & quivers'), f"largeur du filtre Type : {w.kind_box.cget('width')}")
     w.kind_box.set('All'); w.kind_box.event_generate('<<ComboboxSelected>>'); root.update()
     # regroupement par set (coché par défaut) : une ligne par set après les uniques, repliée, progression sur les
     # pièces trouvées ; recherche du nom du set = set déplié avec toutes ses pièces ; ligne du set = pièces et bonus

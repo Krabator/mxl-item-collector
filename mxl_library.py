@@ -27,22 +27,27 @@ from mxl_rules import unique_row, set_row, table_row, item_type_codes, indestruc
 from mxl_save import (check_game_closed, read_file, read_items, ItemFile, item_blob, blob_item, edit_stash, free_spot,
                       edit_containers, placement_error, EditError)
 
-CATEGORIES = ('weapons', 'armor', 'jewelry', 'charm', 'jewel', 'relic', 'other')   # ordre d'affichage
+CATEGORIES = ('weapons', 'armor', 'jewelry', 'quiver', 'charm', 'jewel', 'relic', 'other')   # ordre d'affichage
+QUIVER_TYPES = frozenset(('bowq', 'xboq'))   # carquois de flèches, de carreaux (catégorie 'quiver', 09/10)
 # familles (filtre « Type » de l'écran Library) : uniques à tiers (base « (1) » à « (4) »), uniques Sacred par niveau
 # d'objet (un unique ne tombe que d'un niveau de zone / monstre au moins égal) : SU 105 (zones 104+), SSU 120 (119+),
 # SSSU 130 (130+) d'après la page officielle « Sacred Uniques » (✅ niveaux identiques au site pour 380 uniques) ;
 # anneaux, amulettes, joyaux et carquois sacrés classés de même par niveau d'objet (09/10 : ✅ game feed du Discord de
-# Median XL, Signet of the Gladiator 120 « SSU », Jewel of Luck et Arkenstone 130 « SSSU ») ; autres uniques (charmes,
-# reliques, quêtes, bijoux ordinaires, Sacred qui ne tombent pas) ; objets de set
+# Median XL, Signet of the Gladiator 120 « SSU », Jewel of Luck et Arkenstone 130 « SSSU ») ; plus bas : avec les
+# uniques à tiers, sans n° de tier (page officielle « Tiered Uniques » : sections Amulets, Rings, Jewels, Quivers) ;
+# autres uniques (charmes, reliques, quêtes, Sacred qui ne tombent pas) ; objets de set
 FAMILIES = ('tiered', 'sacred', 'ssu', 'sssu', 'other', 'set')
 SU_LEVEL, SSU_LEVEL, SSSU_LEVEL = 105, 120, 130
-# types d'objet des bijoux, joyaux et carquois sacrés (« The best rings, amulets, jewels and quivers are also marked as
-# sacred uniques », page officielle) : uniques qui peuvent tomber, de niveau d'objet SU_LEVEL ou plus
+# types d'objet des bijoux, joyaux et carquois (« The best rings, amulets, jewels and quivers are also marked as sacred
+# uniques », page officielle) : uniques qui peuvent tomber ; SU / SSU / SSSU à partir du niveau d'objet SU_LEVEL, sinon
+# avec les uniques à tiers (sans tier : JEWELRY_TIER)
+JEWELRY_TIER = 'jewelry'   # « tier » des bijoux, joyaux et carquois à tiers (filtre « tiered:jewelry »)
 SACRED_JEWELRY_TYPES = frozenset(('ring', 'amul', 'jewl', 'bowq', 'xboq'))
 
 
 def _category(code, name, data):
-    """Catégorie d'une entrée : armes, armures, bijoux (bagues, amulettes), charmes, joyaux, reliques, autres."""
+    """Catégorie d'une entrée : armes, armures, bijoux (bagues, amulettes), carquois (flèches, carreaux), charmes,
+    joyaux, reliques, autres."""
     kind = data.base(code).kind
     if kind in ('weapons', 'armor'):
         return kind
@@ -51,6 +56,8 @@ def _category(code, name, data):
         return 'relic'
     if types & {'ring', 'amul'}:
         return 'jewelry'
+    if types & QUIVER_TYPES:
+        return 'quiver'
     if 'char' in types:
         return 'charm'
     if 'jewl' in types:
@@ -114,6 +121,12 @@ def catalog(data):
 TIERS = ('1', '2', '3', '4', 'sacred')   # tiers d'un objet de base : « (1) » à « (4) », « (Sacred) » en fin de nom
 
 
+def entry_tier(e):
+    """Tier d'une entrée du catalogue à tiers : celui de son objet de base (base_tier), JEWELRY_TIER pour un bijou,
+    joyau ou carquois (sans tier) ; None pour les autres familles."""
+    return (base_tier(e['base']) or JEWELRY_TIER) if e['family'] == 'tiered' else None
+
+
 def base_tier(base_name):
     """Tiers d'un objet de base d'après la fin de son nom (TIERS), ou None (objet sans tiers)."""
     m = re.search(r'\((1|2|3|4|Sacred)\)$', base_name or '')
@@ -124,16 +137,18 @@ def family(kind, base, level, droppable, types=()):
     """Famille d'une entrée (FAMILIES) : 'set' ; unique 'tiered' (objet de base à tiers « (1) » à « (4) ») ; unique
     Sacred qui peut tomber : 'sssu' (niveau d'objet 130 et plus), 'ssu' (120 et plus), sinon 'sacred' (SU : 105, et
     les rares 80 à 110) ; anneau, amulette, joyau ou carquois unique (types : types de l'objet de base,
-    SACRED_JEWELRY_TYPES) qui peut tomber, de niveau 105 ou plus : mêmes seuils ; autres uniques : 'other' (charmes,
-    reliques, quêtes, bijoux de niveau plus bas, Sacred qui ne tombent pas)."""
+    SACRED_JEWELRY_TYPES) qui peut tomber, de niveau 105 ou plus : mêmes seuils ; plus bas : 'tiered' (sans n° de
+    tier, comme sur la page officielle « Tiered Uniques », 09/10) ; autres uniques : 'other' (charmes, reliques,
+    quêtes, Sacred qui ne tombent pas)."""
     if kind == 'set':
         return 'set'
     if re.search(r'\([1-4]\)$', base):
         return 'tiered'
     level = level or 0
-    if droppable and (base.endswith('(Sacred)') or (SACRED_JEWELRY_TYPES & set(types) and level >= SU_LEVEL)):
+    jewelry = droppable and bool(SACRED_JEWELRY_TYPES & set(types))
+    if droppable and (base.endswith('(Sacred)') or (jewelry and level >= SU_LEVEL)):
         return 'sssu' if level >= SSSU_LEVEL else 'ssu' if level >= SSU_LEVEL else 'sacred'
-    return 'other'
+    return 'tiered' if jewelry else 'other'
 
 
 def entry_key(it, data):

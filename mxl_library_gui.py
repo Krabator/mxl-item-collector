@@ -28,7 +28,7 @@ from mxl_skills import skill_refs, cast_only_skills
 from mxl_stat_text import segments
 from mxl_library_search import index_steps, parse_query, search, line_matches, skill_classes
 import settings
-from mxl_library import (CATEGORIES, FAMILIES, base_tier, ETHEREAL, two_variants, rank, restore_destroyed, take_out, LibraryError)
+from mxl_library import (CATEGORIES, FAMILIES, JEWELRY_TIER, entry_tier, ETHEREAL, two_variants, rank, restore_destroyed, take_out, LibraryError)
 from mxl_save import EditError
 from mxl_widgets import AutoScrollbar
 from mxl_format import FormatError
@@ -129,9 +129,11 @@ class LibraryWindow(StorageTab, DetailImage):
         # catégorie ; valeurs = (clé, libellé traduit)
         self.states = [('all', tr('library.all')), ('found', tr('library.found')), ('stored', tr('library.stored')),
                        ('missing', tr('library.missing'))]
-        # uniques à tiers déclinés par tiers (« tiered:1 » à « tiered:4 » : fin du nom de l'objet de base)
+        # uniques à tiers déclinés par tiers (« tiered:1 » à « tiered:4 » : fin du nom de l'objet de base), puis
+        # bijoux, joyaux et carquois à tiers (« tiered:jewelry », sans tier)
+        tiers = [f'tiered:{t}' for t in (*'1234', JEWELRY_TIER)]
         self.kinds = [('all', tr('library.all'))] + [(k, tr('library.kind.' + k.replace(':', ''))) for f in FAMILIES
-                                                     for k in ([f'tiered:{t}' for t in '1234'] if f == 'tiered' else [f])]
+                                                     for k in (tiers if f == 'tiered' else [f])]
         self.categories = [('all', tr('library.all'))] + [(c, tr('library.cat.' + c)) for c in CATEGORIES]
         self.state_box = self.combo(coll_filters, 'library.state', self.states)
         self.kind_box = self.combo(coll_filters, 'library.kind', self.kinds)
@@ -419,7 +421,9 @@ class LibraryWindow(StorageTab, DetailImage):
     def combo(self, parent, label_key, values):
         """Liste déroulante de filtre (libellés traduits), sur « tous » par défaut."""
         ttk.Label(parent, text=tr(label_key), bootstyle='secondary').pack(side='left')
-        box = ttk.Combobox(parent, state='readonly', width=14, values=[v for _, v in values])
+        # largeur : celle du plus long libellé (« Tiered jewelry & quivers »), au moins 14 caractères
+        box = ttk.Combobox(parent, state='readonly', width=max(14, max(len(v) for _, v in values) + 1),
+                           values=[v for _, v in values])
         box.current(0)
         box.bind('<<ComboboxSelected>>', lambda e: (box.selection_clear(), self.refresh()))
         box.pack(side='left', padx=(6, 18))
@@ -441,7 +445,7 @@ class LibraryWindow(StorageTab, DetailImage):
         for e in self.app.catalog.values():
             f = found.get(e['key'])
             if (state == 'found' and not f) or (state == 'missing' and f) or (state == 'stored' and e['key'] not in stored and e['key'] + ETHEREAL not in stored) \
-                    or kind not in ('all', e['family'], f"{e['family']}:{base_tier(e['base'])}") \
+                    or kind not in ('all', e['family'], f"{e['family']}:{entry_tier(e)}") \
                     or category not in ('all', e['category']) \
                     or terms and e['key'] not in self.hit_items and self.set_ids.get(e['key']) not in self.hit_sets:
                 continue

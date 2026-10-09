@@ -154,7 +154,7 @@ def check_page(ctx, name, family, page_known=()):
 
 @case('Documentation', 'page « Tiered Uniques » : infobulles identiques au site (tous les uniques, tiers 1 à 4)')
 def tiered_uniques(ctx):
-    check_page(ctx, 'tiereduniques', lambda e: e['kind'] == 'unique' and re.search(r'\([1-4]\)$', e['base']))
+    check_page(ctx, 'tiereduniques', lambda e: e['kind'] == 'unique' and e['family'] == 'tiered')
 
 
 @case('Documentation', 'page « Sacred Uniques » : infobulles identiques au site (tous les uniques Sacred)')
