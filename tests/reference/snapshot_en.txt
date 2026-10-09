@@ -1,0 +1,511 @@
+p1 (1,0) Tir Rune [r03]
+p1 (2,0) Nef Rune [r04]
+p1 (3,0) Sol Rune [r12]
+p1 (4,0) Sol Rune [r12]
+p1 (13,11) El Rune [r01]
+p1 (13,10) Tir Rune [r03]
+p1 (13,9) Eld Rune [r02]
+p1 (13,7) Tir Rune [r03]
+p1 (13,6) Amn Rune [r11]
+p1 (13,5) Eld Rune [r02]
+p1 (13,3) Topaz [gsy]
+p1 (13,2) Diamond [gsw]
+p1 (5,8) Cube Reagent
+Arcane Shards (2) [qu2]
+p1 (5,0) Eth Rune [r05]
+p1 (2,5) Leather Gloves (1) [632] — superior, ilvl 6 — runeword « Enlightenment »
+    defense 9, internal durability 170/115 (not shown by MXL), 1 socket(s), 1 filled
+    stat  16 Enhanced Defense             value=43 (range 35–50)
+    stat  36 Physical Resist              value=1 (range 1–1)
+    -- Runeword stats --
+    stat   0 to Strength                  value=2 (range 2–2)
+    stat   1 to Energy                    value=2 (range 2–2)
+    stat   2 to Dexterity                 value=2 (range 2–2)
+    stat   3 to Vitality                  value=2 (range 2–2)
+    stat  41 Lightning Resist             value=15 (range 15–15)
+    stat  60 Life stolen per Hit          value=2 (range 2–2)
+    stat  74 Life Regenerated per Second  value=39 (range 30–45)
+    stat  89 to Light Radius              value=6 (range 4–6)
+    stat  93 Attack Speed                 value=10 (range 10–10)
+    stat  99 Hit Recovery                 value=10 (range 10–10)
+    stat 102 Block Speed                  value=10 (range 10–10)
+    stat 105 Cast Speed                   value=10 (range 10–10)
+    stat 228 Mana Cost of Skills          value=-10 (range -10–-10)
+    stat 372 Cannot be Unsocketed         value=1
+    Socketed item: p1 (0,0) El Rune [r01]
+p1 (2,3) Leather Gloves (1) [632] — normal, ilvl 10 — runeword « Enlightenment »
+    defense 8, internal durability 171/115 (not shown by MXL), 1 socket(s), 1 filled
+    -- Runeword stats --
+    stat   0 to Strength                  value=2 (range 2–2)
+    stat   1 to Energy                    value=2 (range 2–2)
+    stat   2 to Dexterity                 value=2 (range 2–2)
+    stat   3 to Vitality                  value=2 (range 2–2)
+    stat  41 Lightning Resist             value=15 (range 15–15)
+    stat  60 Life stolen per Hit          value=2 (range 2–2)
+    stat  74 Life Regenerated per Second  value=45 (range 30–45)
+    stat  89 to Light Radius              value=6 (range 4–6)
+    stat  93 Attack Speed                 value=10 (range 10–10)
+    stat  99 Hit Recovery                 value=10 (range 10–10)
+    stat 102 Block Speed                  value=10 (range 10–10)
+    stat 105 Cast Speed                   value=10 (range 10–10)
+    stat 228 Mana Cost of Skills          value=-10 (range -10–-10)
+    stat 372 Cannot be Unsocketed         value=1
+    Socketed item: p1 (0,0) El Rune [r01]
+p1 (13,8) Turquoise [7$c]
+p1 (13,13) Tir Rune [r03]
+p1 (13,12) Eld Rune [r02]
+p1 (0,0) Eld Rune [r02]
+p2 (12,0) Gambeson (1) [1@G] — magic, ilvl 5
+    defense 81, internal durability 186/134 (not shown by MXL), 1 socket(s), 0 filled
+    stat  79 Gold Find                    value=3 (range 3–5)
+    stat 411 Suffixes:                    value=1
+p2 (13,3) Bone Wand (1) [l12] — magic, ilvl 5
+    base damage one-hand 5–6, internal durability 202/150 (not shown by MXL), 1 socket(s), 0 filled
+    stat 411 Suffixes:                    value=1
+    stat 470 to Summon Damage             value=10 (range 9–10)
+p2 (11,3) Unraveller Head (1) [w27] — magic, ilvl 6
+    defense 100, internal durability 188/143 (not shown by MXL)
+    stat   1 to Energy                    value=19 (range 16–20)
+    stat 395 FLYING POLAR BUFFALO ERROR   value=-1 (range -1–-1)
+    stat 411 Suffixes:                    value=1
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (13,5) Amulet [amu] — magic, ilvl 3
+    stat   9 to Mana                      value=26 (range 23–30)
+    stat 410 Prefixes:                    value=1
+    stat 425 FLYING POLAR BUFFALO ERROR   value=6 (range 1–10)
+p2 (12,10) Spear (1) [137] — rare, ilvl 5 « Shadow Scalpel »
+    base damage two-hand 5–8, internal durability 180/150 (not shown by MXL), 2 socket(s), 0 filled
+    stat  57 to Minimum Poison Damage     value=320 (range 320–320)
+    stat  58 to Maximum Poison Damage     value=320 (range 320–320)
+    stat  59 FLYING POLAR BUFFALO ERROR   value=25 (range 25–25)
+    stat  93 Attack Speed                 value=20 (range 20–20)
+    stat 228 Mana Cost of Skills          value=-10 (range -10–-10)
+    stat 395 FLYING POLAR BUFFALO ERROR   value=3 (range 3–3)
+    stat 410 Prefixes:                    value=2
+    stat 411 Suffixes:                    value=1
+p2 (13,9) Amulet [amu] — magic, ilvl 3
+    stat   0 to Strength                  value=5 (range 5–6)
+    stat   1 to Energy                    value=5 (range 5–6)
+    stat   2 to Dexterity                 value=5 (range 5–6)
+    stat   3 to Vitality                  value=5 (range 5–6)
+    stat 411 Suffixes:                    value=1
+    stat 425 FLYING POLAR BUFFALO ERROR   value=1 (range 1–10)
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (13,8) Ring [rin] — magic, ilvl 3
+    stat  41 Lightning Resist             value=10 (range 6–10)
+    stat 411 Suffixes:                    value=1
+p2 (8,0) Circlet (1) [k01] — superior, ilvl 2
+    defense 48, internal durability 169/110 (not shown by MXL), 1 socket(s), 0 filled
+    stat  16 Enhanced Defense             value=54 (range 35–60)
+p2 (13,6) Wand (1) [l10] — rare, ilvl 6 « Viper Breaker »
+    base damage one-hand 3–4, internal durability 156/102 (not shown by MXL), 1 socket(s), 0 filled
+    stat  39 Fire Resist                  value=18 (range 15–20)
+    stat 295 Mana on Melee Attack         value=3 (range 3–5)
+    stat 335 to Enemy Cold Resistance     value=4 (range 4–5)
+    stat 410 Prefixes:                    value=1
+    stat 411 Suffixes:                    value=2
+    stat 491 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (5,0) Bone Wand (1) [l12] — magic, ilvl 6
+    base damage one-hand 5–6, internal durability 196/150 (not shown by MXL), 1 socket(s), 0 filled
+    stat 295 Mana on Melee Attack         value=3 (range 3–5)
+    stat 410 Prefixes:                    value=1
+    stat 411 Suffixes:                    value=1
+    stat 470 to Summon Damage             value=9 (range 9–10)
+p2 (11,2) Amulet [amu] — magic, ilvl 12
+    stat   7 to Life                      value=36 (range 31–45)
+    stat 410 Prefixes:                    value=1
+    stat 425 FLYING POLAR BUFFALO ERROR   value=9 (range 1–10)
+p2 (2,0) Grim Wand (1) [l13] — rare, ilvl 9 « Doom Crusher »
+    base damage one-hand 6–8, internal durability 231/198 (not shown by MXL), 1 socket(s), 0 filled
+    stat   9 to Mana                      value=28 (range 23–30)
+    stat  39 Fire Resist                  value=16 (range 15–20)
+    stat 119 Bonus to Attack Rating       value=13 (range 11–25)
+    stat 295 Mana on Melee Attack         value=5 (range 3–5)
+    stat 329 to Fire Spell Damage         value=7 (range 6–7)
+    stat 410 Prefixes:                    value=3
+    stat 411 Suffixes:                    value=2
+    stat 490 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (3,0) Sacred Globe (1) [j11] — rare, ilvl 9 « Imp Talisman »
+    base damage one-hand 4–5, internal durability 180/150 (not shown by MXL), 1 socket(s), 0 filled
+    stat   2 to Dexterity                 value=10 (range 8–10)
+    stat  80 Magic Find                   value=22 (range 20–24)
+    stat  83 to Sorceress Skill Levels    value=1 param=1 (range 1–1)
+    stat  86 Life after each Kill         value=11 (range 10–15)
+    stat 332 to Poison Spell Damage       value=12 (range 11–13)
+    stat 410 Prefixes:                    value=3
+    stat 411 Suffixes:                    value=2
+    stat 490 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (12,5) Arrow Quiver [aqv] — magic, ilvl 8
+    quantity 500/500
+    stat   2 to Dexterity                 value=8 (range 8–10)
+    stat 411 Suffixes:                    value=1
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (0,4) Preserved Head (1) [w25] — normal, ilvl 10
+    defense 46, internal durability 178/126 (not shown by MXL), 1 socket(s), 0 filled
+    stat 395 FLYING POLAR BUFFALO ERROR   value=-1 (range -1–-1)
+p2 (10,0) Blackguard Helm (1) [50!] — superior, ilvl 10
+    defense 62, internal durability 175/119 (not shown by MXL), 2 socket(s), 0 filled
+    stat  16 Enhanced Defense             value=52 (range 35–60)
+p2 (4,0) Backsword (1) [7@5] — rare, ilvl 10 « Bone Scalpel »
+    base damage one-hand 7–8, internal durability 214/190 (not shown by MXL), 1 socket(s), 0 filled
+    stat  39 Fire Resist                  value=19 (range 15–20)
+    stat  48 to Minimum Fire Damage       value=10 (range 7–10)
+    stat  49 to Maximum Fire Damage       value=18 (range 13–18)
+    stat  60 Life stolen per Hit          value=5 (range 5–5)
+    stat  93 Attack Speed                 value=20 (range 20–20)
+    stat 228 Mana Cost of Skills          value=-10 (range -10–-10)
+    stat 395 FLYING POLAR BUFFALO ERROR   value=2 (range 2–2)
+    stat 410 Prefixes:                    value=3
+    stat 411 Suffixes:                    value=3
+    stat 444 to Summon Life               value=10 (range 9–10)
+    stat 458 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (5,2) Full Helm (1) [618] — rare, ilvl 14 « Empyrian Stinger »
+    defense 96, internal durability 178/135 (not shown by MXL), 1 socket(s), 0 filled
+    stat   1 to Energy                    value=10 (range 8–10)
+    stat  39 Fire Resist                  value=18 (range 15–20)
+    stat  74 Life Regenerated per Second  value=40 (range 10–50)  (the game shows ~value/10)
+    stat  80 Magic Find                   value=9 (range 8–10)
+    stat 335 to Enemy Cold Resistance     value=5 (range 3–5)
+    stat 410 Prefixes:                    value=2
+    stat 411 Suffixes:                    value=3
+    stat 491 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (4,4) Ring [rin] — magic, ilvl 11
+    stat   7 to Life                      value=20 (range 11–20)
+    stat  45 Poison Resist                value=10 (range 6–10)
+    stat 410 Prefixes:                    value=1
+    stat 411 Suffixes:                    value=1
+p2 (12,9) Amulet [amu] — magic, ilvl 10
+    stat  85 to Experience Gained         value=1 (range 1–1)
+    stat  93 Attack Speed                 value=10 (range 10–10)
+    stat 410 Prefixes:                    value=1
+    stat 411 Suffixes:                    value=1
+    stat 425 FLYING POLAR BUFFALO ERROR   value=10 (range 1–10)
+p2 (12,8) Ring [rin] — magic, ilvl 10
+    stat   2 to Dexterity                 value=3 (range 1–3)
+    stat 411 Suffixes:                    value=1
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (11,13) Ring [rin] — magic, ilvl 10
+    stat  74 Life Regenerated per Second  value=16 (range 10–50)  (the game shows ~value/10)
+    stat 410 Prefixes:                    value=1
+p2 (11,12) Amulet [amu] — magic, ilvl 10
+    stat 329 to Fire Spell Damage         value=6 (range 6–7)
+    stat 410 Prefixes:                    value=1
+    stat 425 FLYING POLAR BUFFALO ERROR   value=8 (range 1–10)
+    stat 490 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p2 (0,0) Raptor Scythe (1) [!08] — rare, ilvl 9 « Eagle Wand »
+    base damage two-hand 5–8, internal durability 212/170 (not shown by MXL), 2 socket(s), 1 filled
+    stat   2 to Dexterity                 value=20 (range 16–20)
+    stat  60 Life stolen per Hit          value=5 (range 5–5)
+    stat 119 Bonus to Attack Rating       value=25 (range 11–25)
+    stat 198 5% Chance to cast level 2 Flamefront on Striking value=5 param=33474 (range 5–5)
+    stat 200 Mega Impact                  value=25 param=39233 (range 25–25)
+    stat 295 Mana on Melee Attack         value=5 (range 3–5)
+    stat 395 FLYING POLAR BUFFALO ERROR   value=3 (range 3–3)
+    stat 410 Prefixes:                    value=2
+    stat 411 Suffixes:                    value=3
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+    Socketed item: p2 (0,0) Ruby [gsr]
+p2 (6,9) Breast Plate (1) [607] — superior, ilvl 10
+    defense 267, internal durability 217/159 (not shown by MXL), 2 socket(s), 0 filled
+    stat  16 Enhanced Defense             value=46 (range 35–50)
+    stat  36 Physical Resist              value=1 (range 1–1)
+p2 (4,8) Jewel [jew] — rare, ilvl 8 « Peace Heart »
+    stat   1 to Energy                    value=2 (range 2–4)
+    stat  21 to Minimum Damage            value=1 (range 1–1)
+    stat  23 to Minimum Damage            value=1 (range 1–1)
+    stat  74 Life Regenerated per Second  value=75 (range 51–75)  (the game shows ~value/10)
+    stat  91 Requirements                 value=-4 (range -4–-4)
+    stat 159 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+    stat 478 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (12,0) Hard Leather Armor (1) [602] — magic, ilvl 5
+    defense 71, internal durability 184/129 (not shown by MXL), 2 socket(s), 0 filled
+    stat   0 to Strength                  value=17 (range 16–20)
+    stat  74 Life Regenerated per Second  value=43 (range 10–100)  (the game shows ~value/10)
+    stat 410 Prefixes:                    value=1
+    stat 411 Suffixes:                    value=1
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (13,11) Ring [rin] — magic, ilvl 1
+    stat   2 to Dexterity                 value=1 (range 1–3)
+    stat 411 Suffixes:                    value=1
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (5,1) Light Belt (1) [628] — rare, ilvl 3 « Plague Knot »
+    defense 62, internal durability 183/124 (not shown by MXL), 1 socket(s), 0 filled
+    stat   9 to Mana                      value=19 (range 16–20)
+    stat  16 Enhanced Defense             value=41 (range 40–50)
+    stat  74 Life Regenerated per Second  value=46 (range 10–50)  (the game shows ~value/10)
+    stat  79 Gold Find                    value=3 (range 2–3)
+    stat 335 to Enemy Cold Resistance     value=5 (range 3–5)
+    stat 410 Prefixes:                    value=3
+    stat 411 Suffixes:                    value=2
+    stat 452 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+    stat 491 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (0,0) Amulet [amu] — magic, ilvl 3
+    stat 411 Suffixes:                    value=1
+    stat 425 FLYING POLAR BUFFALO ERROR   value=6 (range 1–10)
+    stat 470 to Summon Damage             value=10 (range 9–10)
+p3 (13,12) Jewel [jew] — magic, ilvl 2
+    stat   9 to Mana                      value=7 (range 6–10)
+    stat 478 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (6,4) Javelin (1) [132] — magic, ilvl 20
+    base damage throw 1–4, base damage one-hand 5–6, internal durability 182/122 (not shown by MXL), 1 socket(s), 0 filled, quantity 60/60
+    stat 210 Life on Melee Attack         value=13 (range 11–15)
+    stat 395 FLYING POLAR BUFFALO ERROR   value=2 (range 2–2)
+    stat 411 Suffixes:                    value=1
+p3 (0,1) War Staff (1) [155] — normal, ilvl 11
+    base damage two-hand 9–11, internal durability 254/208 (not shown by MXL), 2 socket(s), 0 filled
+    stat 395 FLYING POLAR BUFFALO ERROR   value=3 (range 3–3)
+p3 (0,5) Skull Cap (1) [616] — low quality, ilvl 10
+    defense 36, internal durability 157/100 (not shown by MXL), 1 socket(s), 0 filled
+p3 (0,8) Scale Mail (1) [605] — low quality, ilvl 10
+    defense 150, internal durability 167/108 (not shown by MXL), 2 socket(s), 0 filled
+p3 (13,13) Amulet [amu] — magic, ilvl 11
+    stat 329 to Fire Spell Damage         value=5 (range 5–10)
+    stat 330 to Lightning Spell Damage    value=5 (range 5–10)
+    stat 331 to Cold Spell Damage         value=5 (range 5–10)
+    stat 332 to Poison Spell Damage       value=5 (range 5–10)
+    stat 357 to Physical/Magic Spell Damage value=5 (range 5–10)
+    stat 410 Prefixes:                    value=1
+    stat 411 Suffixes:                    value=1
+    stat 425 FLYING POLAR BUFFALO ERROR   value=4 (range 1–10)
+    stat 444 to Summon Life               value=10 (range 9–10)
+    stat 490 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (1,7) Ring [rin] — magic, ilvl 10
+    stat  74 Life Regenerated per Second  value=26 (range 10–50)  (the game shows ~value/10)
+    stat 333 to Enemy Fire Resistance     value=5 (range 3–5)
+    stat 410 Prefixes:                    value=1
+    stat 411 Suffixes:                    value=1
+    stat 491 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (7,8) Throwing Axe (1) [149] — magic, ilvl 10
+    base damage two-hand 1–1, internal durability 224/170 (not shown by MXL), 1 socket(s), 0 filled, quantity 130/130
+    stat   0 to Strength                  value=5 (range 5–6)
+    stat   1 to Energy                    value=5 (range 5–6)
+    stat   2 to Dexterity                 value=5 (range 5–6)
+    stat   3 to Vitality                  value=5 (range 5–6)
+    stat  50 to Minimum Lightning Damage  value=5 (range 5–5)
+    stat  51 to Maximum Lightning Damage  value=6 (range 6–6)
+    stat  97 to skill #2001               value=13 param=2001 (range 13–13)
+    stat 383 FLYING POLAR BUFFALO ERROR   value=13 param=2001 (range 13–13)
+    stat 395 FLYING POLAR BUFFALO ERROR   value=2 (range 2–2)
+    stat 411 Suffixes:                    value=1
+    stat 415 Innate Fire Damage: %d (%.1f%% of %s) value=13 param=1
+    stat 492 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (6,8) Hexblade (1) [!70] — magic, ilvl 20
+    base damage throw 1–1, internal durability 210/150 (not shown by MXL), 1 socket(s), 0 filled
+    stat  48 to Minimum Fire Damage       value=5 (range 5–5)
+    stat  49 to Maximum Fire Damage       value=6 (range 6–6)
+    stat  97 to skill #2000               value=10 param=2000 (range 10–10)
+    stat 335 to Enemy Cold Resistance     value=4 (range 3–5)
+    stat 383 FLYING POLAR BUFFALO ERROR   value=10 param=2000 (range 10–10)
+    stat 395 FLYING POLAR BUFFALO ERROR   value=2 (range 2–2)
+    stat 411 Suffixes:                    value=1
+    stat 415 Innate Fire Damage: %d (%.1f%% of %s) value=10 param=512
+    stat 491 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+p3 (3,3) Short Bow (1) [160] — superior, ilvl 3 — runeword « Shark »
+    base damage two-hand 4–5, internal durability -/90 (not shown by MXL), 2 socket(s), 2 filled
+    stat  17 Enhanced Maximum Damage      value=50 (range 35–50)
+    stat  18 Enhanced Minimum Damage      value=50 (range 35–50)
+    stat 119 Bonus to Attack Rating       value=67 (range 50–100)
+    -- Runeword stats --
+    stat   9 to Mana                      value=-1 (range -1–-1)
+    stat  17 Enhanced Maximum Damage      value=33 (range 24–35)
+    stat  18 Enhanced Minimum Damage      value=33 (range 24–35)
+    stat  93 Attack Speed                 value=20 (range 20–20)
+    stat 196 5% Chance to cast level 9 Bloodlust on Kill value=5 param=32009 (range 5–5)
+    stat 218 to Maximum Damage            value=4 (range 4–4)
+    stat 225 Bonus to Attack Rating       value=48 (range 48–48)
+    stat 372 Cannot be Unsocketed         value=1
+    stat 380 Bonus Damage to Bloodlust    value=8 (range 7–9)
+    Socketed item: p3 (0,0) Jewel [jew] — magic, ilvl 2
+    stat 444 to Summon Life               value=6 (range 2–6)
+    stat 478 FLYING POLAR BUFFALO ERROR   value=1 (range 1–1)
+    Socketed item: p3 (1,0) Eld Rune [r02]
+p7 (7,3) Warp Blade (1) [!98] — normal, ilvl 10
+    base damage one-hand 7–10, internal durability 249/230 (not shown by MXL), 2 socket(s), 0 filled
+    stat 277 Area Effect Attack           value=100 param=38081 (range 100–100)
+    stat 395 FLYING POLAR BUFFALO ERROR   value=2 (range 2–2)
+
+[[[";", "Tir Rune"]], [["0", "Required Level: 10"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+3% to Fire Spell Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3% to Fire Spell Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3% to Fire Spell Damage"]]]
+[]
+invrTir False
+[[[";", "Nef Rune"]], [["0", "Required Level: 13"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+3% to Lightning Spell Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3% to Lightning Spell Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3% to Lightning Spell Damage"]]]
+[]
+invrNef False
+[[[";", "Sol Rune"]], [["1", "Required Level: 33"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+60 to Mana"]], [["0", ""]], [["4", "Armor:"]], [["0", "+40 to Mana"]], [["0", ""]], [["4", "Shields:"]], [["0", "+40 to Mana"]]]
+[]
+invrSol True
+[[[";", "Sol Rune"]], [["1", "Required Level: 33"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+60 to Mana"]], [["0", ""]], [["4", "Armor:"]], [["0", "+40 to Mana"]], [["0", ""]], [["4", "Shields:"]], [["0", "+40 to Mana"]]]
+[]
+invrSol True
+[[[";", "El Rune"]], [["0", "Required Level: 6"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+3 to all Attributes"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3 to all Attributes"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3 to all Attributes"]]]
+[]
+invrEl False
+[[[";", "Tir Rune"]], [["0", "Required Level: 10"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+3% to Fire Spell Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3% to Fire Spell Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3% to Fire Spell Damage"]]]
+[]
+invrTir False
+[[[";", "Eld Rune"]], [["0", "Required Level: 8"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+5 to Maximum Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3 to Maximum Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3 to Maximum Damage"]]]
+[]
+invrEld False
+[[[";", "Tir Rune"]], [["0", "Required Level: 10"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+3% to Fire Spell Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3% to Fire Spell Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3% to Fire Spell Damage"]]]
+[]
+invrTir False
+[[[";", "Amn Rune"]], [["1", "Required Level: 30"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "Poison Resist +30%"]], [["0", ""]], [["4", "Armor:"]], [["0", "Poison Resist +25%"]], [["0", ""]], [["4", "Shields:"]], [["0", "Poison Resist +25%"]]]
+[]
+invrAmn True
+[[[";", "Eld Rune"]], [["0", "Required Level: 8"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+5 to Maximum Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3 to Maximum Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3 to Maximum Damage"]]]
+[]
+invrEld False
+[[[";", "Topaz"]], [["0", "Required Level: 12"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+8 Spell Focus"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3% to Energy"]], [["0", ""]], [["4", "Shields:"]], [["0", "Lightning Resist +18%"]]]
+[]
+invgsyc False
+[[[";", "Diamond"]], [["0", "Required Level: 12"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+2% to Spell Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3% to Strength"]], [["0", ""]], [["4", "Shields:"]], [["0", "Elemental Resists +3%"]]]
+[]
+invgswc False
+[[["8", "Arcane Shards (2)"]], [["0", "Cube Reagent"]], [["0", "Right Click to Read"]]]
+[]
+invfary2 False
+[[[";", "Eth Rune"]], [["0", "Required Level: 15"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+3% to Cold Spell Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3% to Cold Spell Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3% to Cold Spell Damage"]]]
+[]
+invrEth False
+[[["4", "Enlightenment"]], [["5", "Leather Gloves (1)"]], [["4", "El"]], [["0", "Base Defense: 9"], ["5", " [6-8]"]], [["0", "Defense: 12"], ["0", " ("], ["3", "+43%"], ["0", ")"], ["5", " [35-50]"]], [["0", "Required Level: 6"]], [["0", "Required Strength: 25"]], [["3", "+10% Combat Speeds"]], [["3", "+2% Life stolen per Hit"]], [["3", "+5 to all Attributes"], ["0", " ("], ["0", "RW:"], ["3", "2"], ["0", " + "], ["0", "R:"], ["3", "3"], ["0", ")"]], [["3", "+3 Life Regenerated per Second"], ["5", " [3-4]"]], [["3", "Lightning Resist +15%"]], [["3", "Physical Resist +1%"]], [["3", "-10% Mana Cost of Skills"]], [["3", "+6 to Light Radius"], ["5", " [4-6]"]], [["3", "Socketed (1)"]]]
+[["+43% Enhanced Defense", [["B", 35, 50, 43, "43%"]]], ["+3 Life Regenerated per Second", [["RW", 30, 45, 39, "3 (39)"]]], ["+6 to Light Radius", [["RW", 4, 6, 6, "6"]]]]
+invlgl False qualité 71.11
+[[["4", "Enlightenment"]], [["5", "Leather Gloves (1)"]], [["4", "El"]], [["0", "Base Defense: 8"], ["5", " [6-8]"]], [["0", "Defense: 8"]], [["0", "Required Level: 6"]], [["0", "Required Strength: 25"]], [["3", "+10% Combat Speeds"]], [["3", "+2% Life stolen per Hit"]], [["3", "+5 to all Attributes"], ["0", " ("], ["0", "RW:"], ["3", "2"], ["0", " + "], ["0", "R:"], ["3", "3"], ["0", ")"]], [["3", "+4 Life Regenerated per Second"], ["5", " [3-4]"]], [["3", "Lightning Resist +15%"]], [["3", "-10% Mana Cost of Skills"]], [["3", "+6 to Light Radius"], ["5", " [4-6]"]], [["3", "Socketed (1)"]]]
+[["8 Base Defense", [["B", 6, 8, 8, "8"]]], ["+4 Life Regenerated per Second", [["RW", 30, 45, 45, "4 (45)"]]], ["+6 to Light Radius", [["RW", 4, 6, 6, "6"]]]]
+invlgl False qualité 100.00
+[[[";", "Turquoise"]], [["0", "Required Level: 12"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "Regenerate Mana +6%"]], [["0", ""]], [["4", "Armor:"]], [["0", "Poison Resist +12%"]], [["0", ""]], [["4", "Shields:"]], [["0", "+4% Magic Find"]]]
+[]
+invgstc False
+[[[";", "Tir Rune"]], [["0", "Required Level: 10"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+3% to Fire Spell Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3% to Fire Spell Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3% to Fire Spell Damage"]]]
+[]
+invrTir False
+[[[";", "Eld Rune"]], [["0", "Required Level: 8"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+5 to Maximum Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3 to Maximum Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3 to Maximum Damage"]]]
+[]
+invrEld False
+[[[";", "Eld Rune"]], [["0", "Required Level: 8"]], [["0", "Can be Inserted into Socketed Items"]], [["0", ""]], [["4", "Weapons:"]], [["0", "+5 to Maximum Damage"]], [["0", ""]], [["4", "Armor:"]], [["0", "+3 to Maximum Damage"]], [["0", ""]], [["4", "Shields:"]], [["0", "+3 to Maximum Damage"]]]
+[]
+invrEld False
+[[["3", "Gambeson (1)"]], [["0", "Base Defense: 81"], ["5", " [59-119]"]], [["0", "Defense: 81"]], [["1", "(Sorceress Only)"]], [["0", "Required Level: 1"]], [["0", "Required Dexterity: 25"]], [["9", "Suffixes: 1"]], [["3", "+3% Gold Find"], ["5", " [3-5]"]], [["3", "Socketed (1)"]]]
+[["81 Base Defense", [["B", 59, 119, 81, "81"]]], ["+3% Gold Find", [["B", 3, 5, 3, "3%"]]]]
+invxtuu True qualité 18.33
+[[["3", "Bone Wand (1)"]], [["0", "One-Hand Base Damage: 5 to 6"]], [["0", "One-Hand Damage: 5 to 6"]], [["0", "(Necromancer Only)"]], [["0", "Required Level: 3"]], [["0", "Required Dexterity: 9"]], [["0", "Staff Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 2%"]], [["9", "Suffixes: 1"]], [["3", "+10% to Summon Damage"], ["5", " [9-10]"]], [["3", "Socketed (1)"]]]
+[["+10% to Summon Damage", [["B", 9, 10, 10, "10%"]]]]
+invbwn False qualité 100.00
+[[["3", "Unraveller Head (1)"]], [["0", "Base Defense: 100"], ["5", " [78-151]"]], [["0", "Defense: 100"]], [["0", "Chance to Block: 2%"]], [["0", "(Necromancer Only)"]], [["0", "Required Level: 3"]], [["0", "Required Dexterity: 24"]], [["9", "Suffixes: 1"]], [["3", "+19 to Energy"], ["5", " [16-20]"]]]
+[["100 Base Defense", [["B", 78, 151, 100, "100"]]], ["+19 to Energy", [["B", 16, 20, 19, "19"]]]]
+invne3 False qualité 52.57
+[[["3", "Amulet"]], [["0", "Required Level: 3"]], [["9", "Prefixes: 1"]], [["3", "+26 to Mana"], ["5", " [23-30]"]]]
+[["+26 to Mana", [["B", 23, 30, 26, "26"]]]]
+invamu2 False qualité 42.86
+[[["9", "Shadow Scalpel"]], [["9", "Spear (1)"]], [["0", "Two-Hand Base Damage: 5 to 8"]], [["0", "Two-Hand Damage: 5 to 8"]], [["0", "Required Level: 4"]], [["0", "Spear Class - Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 6%"]], [["9", "Prefixes: 2"]], [["9", "Suffixes: 1"]], [["3", "+20% Attack Speed"]], [["3", "+31 Poison Damage over 1 seconds"]], [["3", "-10% Mana Cost of Skills"]], [["3", "Socketed (2)"]]]
+[]
+invspr False
+[[["3", "Amulet"]], [["0", "Required Level: 1"]], [["9", "Suffixes: 1"]], [["3", "+5 to all Attributes"], ["5", " [5-6]"]]]
+[["+5 to all Attributes", [["B", 5, 6, 5, "5"]]]]
+invamu3 False qualité 0.00
+[[["3", "Ring"]], [["9", "Suffixes: 1"]], [["3", "Lightning Resist +10%"], ["5", " [6-10]"]]]
+[["Lightning Resist +10%", [["B", 6, 10, 10, "10%"]]]]
+invrin2 False qualité 100.00
+[[["5", "Superior Circlet (1)"]], [["0", "Base Defense: 48"], ["5", " [22-47]"]], [["0", "Defense: 73"], ["0", " ("], ["3", "+54%"], ["0", ")"], ["5", " [35-60]"]], [["0", "Required Level: 2"]], [["0", "Required Dexterity: 14"]], [["3", "Socketed (1)"]]]
+[["+54% Enhanced Defense", [["B", 35, 60, 54, "54%"]]]]
+invci0 False qualité 76.00 profil superior:k01
+[[["9", "Viper Breaker"]], [["9", "Wand (1)"]], [["0", "One-Hand Base Damage: 3 to 4"]], [["0", "One-Hand Damage: 3 to 4"]], [["0", "(Necromancer Only)"]], [["0", "Required Level: 3"]], [["0", "Staff Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 2%"]], [["9", "Prefixes: 1"]], [["9", "Suffixes: 2"]], [["3", "-4% to Enemy Cold Resistance"], ["5", " [-4 to -5]"]], [["3", "Fire Resist +18%"], ["5", " [15-20]"]], [["3", "+3 Mana on Melee Attack"], ["5", " [3-5]"]], [["3", "Socketed (1)"]]]
+[["-4% to Enemy Cold Resistance", [["B", 4, 5, 4, "-4% (4)"]]], ["Fire Resist +18%", [["B", 15, 20, 18, "18%"]]], ["+3 Mana on Melee Attack", [["B", 3, 5, 3, "3"]]]]
+invwnd False qualité 20.00
+[[["3", "Bone Wand (1)"]], [["0", "One-Hand Base Damage: 5 to 6"]], [["0", "One-Hand Damage: 5 to 6"]], [["0", "(Necromancer Only)"]], [["0", "Required Level: 3"]], [["0", "Required Dexterity: 9"]], [["0", "Staff Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 2%"]], [["9", "Prefixes: 1"]], [["9", "Suffixes: 1"]], [["3", "+9% to Summon Damage"], ["5", " [9-10]"]], [["3", "+3 Mana on Melee Attack"], ["5", " [3-5]"]], [["3", "Socketed (1)"]]]
+[["+9% to Summon Damage", [["B", 9, 10, 9, "9%"]]], ["+3 Mana on Melee Attack", [["B", 3, 5, 3, "3"]]]]
+invbwn False qualité 0.00
+[[["3", "Amulet"]], [["0", "Required Level: 6"]], [["9", "Prefixes: 1"]], [["3", "+36 to Life"], ["5", " [31-45]"]]]
+[["+36 to Life", [["B", 31, 45, 36, "36"]]]]
+invamu2 False qualité 35.71
+[[["9", "Doom Crusher"]], [["9", "Grim Wand (1)"]], [["0", "One-Hand Base Damage: 6 to 8"]], [["0", "One-Hand Damage: 6 to 8"]], [["0", "(Necromancer Only)"]], [["0", "Required Level: 9"]], [["0", "Required Dexterity: 15"]], [["0", "Staff Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 2%"]], [["9", "Prefixes: 3"]], [["9", "Suffixes: 2"]], [["3", "+13% Bonus to Attack Rating"], ["5", " [11-25]"]], [["3", "+7% to Fire Spell Damage"], ["5", " [6-7]"]], [["3", "+28 to Mana"], ["5", " [23-30]"]], [["3", "Fire Resist +16%"], ["5", " [15-20]"]], [["3", "+5 Mana on Melee Attack"], ["5", " [3-5]"]], [["3", "Socketed (1)"]]]
+[["+13% Bonus to Attack Rating", [["B", 11, 25, 13, "13%"]]], ["+7% to Fire Spell Damage", [["B", 6, 7, 7, "7%"]]], ["+28 to Mana", [["B", 23, 30, 28, "28"]]], ["Fire Resist +16%", [["B", 15, 20, 16, "16%"]]], ["+5 Mana on Melee Attack", [["B", 3, 5, 5, "5"]]]]
+invgwn False qualité 61.14
+[[["9", "Imp Talisman"]], [["9", "Sacred Globe (1)"]], [["0", "One-Hand Base Damage: 4 to 5"]], [["0", "One-Hand Damage: 4 to 5"]], [["1", "(Sorceress Only)"]], [["0", "Required Level: 7"]], [["0", "Required Dexterity: 8"]], [["0", "Staff Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 4%"]], [["9", "Prefixes: 3"]], [["9", "Suffixes: 2"]], [["3", "+1 to Sorceress Skill Levels"]], [["3", "+12% to Poison Spell Damage"], ["5", " [11-13]"]], [["3", "+10 to Dexterity"], ["5", " [8-10]"]], [["3", "+11 Life after each Kill"], ["5", " [10-15]"]], [["3", "+22% Magic Find"], ["5", " [20-24]"]], [["3", "Socketed (1)"]]]
+[["+12% to Poison Spell Damage", [["B", 11, 13, 12, "12%"]]], ["+10 to Dexterity", [["B", 8, 10, 10, "10"]]], ["+11 Life after each Kill", [["B", 10, 15, 11, "11"]]], ["+22% Magic Find", [["B", 20, 24, 22, "22%"]]]]
+invob2 True qualité 55.00
+[[["3", "Arrow Quiver"]], [["0", "Quantity: 500"]], [["0", "Required Level: 3"]], [["9", "Suffixes: 1"]], [["3", "+8 to Dexterity"], ["5", " [8-10]"]]]
+[["+8 to Dexterity", [["B", 8, 10, 8, "8"]]]]
+invqvr False qualité 0.00
+[[["5", "Preserved Head (1)"]], [["0", "Base Defense: 46"], ["5", " [35-67]"]], [["0", "Defense: 46"]], [["0", "Chance to Block: 2%"]], [["0", "(Necromancer Only)"]], [["0", "Required Level: 1"]], [["0", "Required Dexterity: 11"]], [["3", "Socketed (1)"]]]
+[["46 Base Defense", [["B", 35, 67, 46, "46"]]]]
+invne1 False qualité 34.38
+[[["5", "Superior Blackguard Helm (1)"]], [["0", "Base Defense: 62"], ["5", " [42-61]"]], [["0", "Defense: 94"], ["0", " ("], ["3", "+52%"], ["0", ")"], ["5", " [35-60]"]], [["1", "(Paladin Only)"]], [["0", "Required Level: 3"]], [["0", "Required Dexterity: 29"]], [["3", "Socketed (2)"]]]
+[["+52% Enhanced Defense", [["B", 35, 60, 52, "52%"]]]]
+invbhmu True qualité 68.00 profil superior:50!
+[[["9", "Bone Scalpel"]], [["9", "Backsword (1)"]], [["0", "One-Hand Base Damage: 7 to 8"]], [["0", "One-Hand Damage: 7 to 8"]], [["1", "(Barbarian Only)"]], [["0", "Required Level: 4"]], [["1", "Required Strength: 55"]], [["0", "Sword Class - Very Fast Attack Speed"]], [["0", "Strength Damage Bonus: 6%"]], [["9", "Prefixes: 3"]], [["9", "Suffixes: 3"]], [["3", "+20% Attack Speed"]], [["3", "Adds 10-18 Fire Damage"], ["5", " [7-10 / 13-18]"]], [["3", "+5% Life stolen per Hit"]], [["3", "+10% to Summon Life"], ["5", " [9-10]"]], [["3", "Fire Resist +19%"], ["5", " [15-20]"]], [["3", "-10% Mana Cost of Skills"]], [["3", "Socketed (1)"]]]
+[["Adds 10-18 Fire Damage", [["B · min", 7, 10, 10, "10"], ["B · max", 13, 18, 18, "18"]]], ["+10% to Summon Life", [["B", 9, 10, 10, "10%"]]], ["Fire Resist +19%", [["B", 15, 20, 19, "19%"]]]]
+inv9sbu True qualité 95.00
+[[["9", "Empyrian Stinger"]], [["9", "Full Helm (1)"]], [["0", "Base Defense: 96"], ["5", " [75-112]"]], [["0", "Defense: 96"]], [["0", "Required Level: 3"]], [["0", "Required Strength: 30"]], [["9", "Prefixes: 2"]], [["9", "Suffixes: 3"]], [["3", "-5% to Enemy Cold Resistance"], ["5", " [-3 to -5]"]], [["3", "+10 to Energy"], ["5", " [8-10]"]], [["3", "+4 Life Regenerated per Second"], ["5", " [1-5]"]], [["3", "Fire Resist +18%"], ["5", " [15-20]"]], [["3", "+9% Magic Find"], ["5", " [8-10]"]], [["3", "Socketed (1)"]]]
+[["96 Base Defense", [["B", 75, 112, 96, "96"]]], ["-5% to Enemy Cold Resistance", [["B", 3, 5, 5, "-5% (5)"]]], ["+10 to Energy", [["B", 8, 10, 10, "10"]]], ["+4 Life Regenerated per Second", [["B", 10, 50, 40, "4 (40)"]]], ["Fire Resist +18%", [["B", 15, 20, 18, "18%"]]], ["+9% Magic Find", [["B", 8, 10, 9, "9%"]]]]
+invfhl False qualité 73.63
+[[["3", "Ring"]], [["0", "Required Level: 3"]], [["9", "Prefixes: 1"]], [["9", "Suffixes: 1"]], [["3", "+20 to Life"], ["5", " [11-20]"]], [["3", "Poison Resist +10%"], ["5", " [6-10]"]]]
+[["+20 to Life", [["B", 11, 20, 20, "20"]]], ["Poison Resist +10%", [["B", 6, 10, 10, "10%"]]]]
+invrin5 False qualité 100.00
+[[["3", "Amulet"]], [["0", "Required Level: 10"]], [["9", "Prefixes: 1"]], [["9", "Suffixes: 1"]], [["3", "+10% Attack Speed"]], [["3", "+1% to Experience Gained"]]]
+[]
+invamu1 False
+[[["3", "Ring"]], [["9", "Suffixes: 1"]], [["3", "+3 to Dexterity"], ["5", " [1-3]"]]]
+[["+3 to Dexterity", [["B", 1, 3, 3, "3"]]]]
+invrin3 False qualité 100.00
+[[["3", "Ring"]], [["9", "Prefixes: 1"]], [["3", "+1 Life Regenerated per Second"], ["5", " [1-5]"]]]
+[["+1 Life Regenerated per Second", [["B", 10, 50, 16, "1 (16)"]]]]
+invrin1 False qualité 15.00
+[[["3", "Amulet"]], [["0", "Required Level: 9"]], [["9", "Prefixes: 1"]], [["3", "+6% to Fire Spell Damage"], ["5", " [6-7]"]]]
+[["+6% to Fire Spell Damage", [["B", 6, 7, 6, "6%"]]]]
+invamu3 False qualité 0.00
+[[["9", "Eagle Wand"]], [["9", "Raptor Scythe (1)"]], [["0", "Two-Hand Base Damage: 5 to 8"]], [["0", "Two-Hand Damage: 5 to 8"]], [["0", "(Necromancer Only)"]], [["0", "Required Level: 12"]], [["0", "Polearm Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 6%"]], [["0", "Strength Damage Bonus: 6%"]], [["9", "Prefixes: 2"]], [["9", "Suffixes: 3"]], [["8", "Mega Impact"]], [["3", "5% Chance to cast level 2 Flamefront on Striking"]], [["3", "+25% Bonus to Attack Rating"], ["5", " [11-25]"]], [["3", "+5% Life stolen per Hit"]], [["3", "+20 to Dexterity"], ["5", " [16-20]"]], [["3", "+5 Mana on Melee Attack"], ["5", " [3-5]"]], [["3", "+6 Life after each Kill"], ["0", " ("], ["0", "G:"], ["3", "6"], ["0", ")"]], [["3", "Socketed (2)"]]]
+[["+25% Bonus to Attack Rating", [["B", 11, 25, 25, "25%"]]], ["+20 to Dexterity", [["B", 16, 20, 20, "20"]]], ["+5 Mana on Melee Attack", [["B", 3, 5, 5, "5"]]]]
+inv9s8u False qualité 100.00
+[[["5", "Superior Breast Plate (1)"]], [["0", "Base Defense: 267"], ["5", " [131-266]"]], [["0", "Defense: 389"], ["0", " ("], ["3", "+46%"], ["0", ")"], ["5", " [35-50]"]], [["0", "Required Level: 2"]], [["0", "Required Strength: 30"]], [["3", "Physical Resist +1%"]], [["3", "Socketed (2)"]]]
+[["+46% Enhanced Defense", [["B", 35, 50, 46, "46%"]]]]
+invbrs False qualité 73.33 profil superior:607
+[[["9", "Peace Heart"]], [["9", "Jewel"]], [["0", "Required Level: 7"]], [["0", "Can be Inserted into Socketed Items"]], [["3", "+1 to Minimum Damage"]], [["3", "+2 to Energy"], ["5", " [2-4]"]], [["3", "+7 Life Regenerated per Second"], ["5", " [5-7]"]], [["3", "Requirements -4%"]]]
+[["+2 to Energy", [["B", 2, 4, 2, "2"]]], ["+7 Life Regenerated per Second", [["B", 51, 75, 75, "7 (75)"]]]]
+invjw5 False qualité 50.00
+[[["3", "Hard Leather Armor (1)"]], [["0", "Base Defense: 71"], ["5", " [56-112]"]], [["0", "Defense: 71"]], [["0", "Required Level: 3"]], [["0", "Required Strength: 28"]], [["9", "Prefixes: 1"]], [["9", "Suffixes: 1"]], [["3", "+17 to Strength"], ["5", " [16-20]"]], [["3", "+4 Life Regenerated per Second"], ["5", " [1-10]"]], [["3", "Socketed (2)"]]]
+[["71 Base Defense", [["B", 56, 112, 71, "71"]]], ["+17 to Strength", [["B", 16, 20, 17, "17"]]], ["+4 Life Regenerated per Second", [["B", 10, 100, 43, "4 (43)"]]]]
+invhla False qualité 29.48
+[[["3", "Ring"]], [["9", "Suffixes: 1"]], [["3", "+1 to Dexterity"], ["5", " [1-3]"]]]
+[["+1 to Dexterity", [["B", 1, 3, 1, "1"]]]]
+invrin1 False qualité 0.00
+[[["9", "Plague Knot"]], [["9", "Light Belt (1)"]], [["0", "Base Defense: 62"], ["5", " [45-61]"]], [["0", "Defense: 87"], ["0", " ("], ["3", "+41%"], ["0", ")"], ["5", " [40-50]"]], [["0", "Required Level: 3"]], [["0", "Required Strength: 26"]], [["9", "Prefixes: 3"]], [["9", "Suffixes: 2"]], [["3", "-5% to Enemy Cold Resistance"], ["5", " [-3 to -5]"]], [["3", "+4 Life Regenerated per Second"], ["5", " [1-5]"]], [["3", "+19 to Mana"], ["5", " [16-20]"]], [["3", "+3% Gold Find"], ["5", " [2-3]"]], [["3", "Socketed (1)"]]]
+[["-5% to Enemy Cold Resistance", [["B", 3, 5, 5, "-5% (5)"]]], ["+41% Enhanced Defense", [["B", 40, 50, 41, "41%"]]], ["+4 Life Regenerated per Second", [["B", 10, 50, 46, "4 (46)"]]], ["+19 to Mana", [["B", 16, 20, 19, "19"]]], ["+3% Gold Find", [["B", 2, 3, 3, "3%"]]]]
+invvbl False qualité 75.00
+[[["3", "Amulet"]], [["0", "Required Level: 3"]], [["9", "Suffixes: 1"]], [["3", "+10% to Summon Damage"], ["5", " [9-10]"]]]
+[["+10% to Summon Damage", [["B", 9, 10, 10, "10%"]]]]
+invamu1 False qualité 100.00
+[[["3", "Jewel"]], [["0", "Can be Inserted into Socketed Items"]], [["3", "+7 to Mana"], ["5", " [6-10]"]]]
+[["+7 to Mana", [["B", 6, 10, 7, "7"]]]]
+invjw5 False qualité 25.00
+[[["3", "Javelin (1)"]], [["0", "Throw Base Damage: 1 to 4"]], [["0", "Throw Damage: 1 to 4"]], [["0", "One-Hand Base Damage: 5 to 6"]], [["0", "One-Hand Damage: 5 to 6"]], [["0", "Quantity: 60"]], [["0", "Required Level: 11"]], [["0", "Javelin Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 4%"]], [["9", "Suffixes: 1"]], [["3", "+13 Life on Melee Attack"], ["5", " [11-15]"]], [["3", "Socketed (1)"]]]
+[["+13 Life on Melee Attack", [["B", 11, 15, 13, "13"]]]]
+invjav False qualité 50.00
+[[["5", "War Staff (1)"]], [["0", "Two-Hand Base Damage: 9 to 11"]], [["0", "Two-Hand Damage: 9 to 11"]], [["0", "Required Level: 5"]], [["1", "Required Dexterity: 46"]], [["0", "Staff Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 6%"]], [["3", "Socketed (2)"]]]
+[]
+invwst True
+[[["5", "Low Quality Skull Cap (1)"]], [["0", "Base Defense: 36"], ["5", " [35-50]"]], [["0", "Defense: 36"]], [["0", "Required Level: 1"]], [["0", "Required Strength: 28"]], [["3", "Socketed (1)"]]]
+[["36 Base Defense", [["B", 35, 50, 36, "36"]]]]
+invskp False qualité 6.67
+[[["5", "Discarded Scale Mail (1)"]], [["0", "Base Defense: 150"], ["5", " [103-205]"]], [["0", "Defense: 150"]], [["0", "Required Level: 2"]], [["0", "Required Strength: 29"]], [["3", "Socketed (2)"]]]
+[["150 Base Defense", [["B", 103, 205, 150, "150"]]]]
+invscl False qualité 46.08
+[[["3", "Amulet"]], [["0", "Required Level: 9"]], [["9", "Prefixes: 1"]], [["9", "Suffixes: 1"]], [["3", "+5% to Spell Damage"], ["5", " [5-10]"]], [["3", "+10% to Summon Life"], ["5", " [9-10]"]]]
+[["+5% to Spell Damage", [["B", 5, 10, 5, "5%"]]], ["+10% to Summon Life", [["B", 9, 10, 10, "10%"]]]]
+invamu3 False qualité 50.00
+[[["3", "Ring"]], [["0", "Required Level: 3"]], [["9", "Prefixes: 1"]], [["9", "Suffixes: 1"]], [["3", "-5% to Enemy Fire Resistance"], ["5", " [-3 to -5]"]], [["3", "+2 Life Regenerated per Second"], ["5", " [1-5]"]]]
+[["-5% to Enemy Fire Resistance", [["B", 3, 5, 5, "-5% (5)"]]], ["+2 Life Regenerated per Second", [["B", 10, 50, 26, "2 (26)"]]]]
+invrin1 False qualité 70.00
+[[["3", "Throwing Axe (1)"]], [["0", "Quantity: 130"]], [["0", "Required Level: 1"]], [["0", "Required Strength: 15"]], [["0", "Axe Class - Very Fast Attack Speed"]], [["0", "Innate Lightning Damage: "], ["9", "5"], ["0", " (13.0% of Strength)"]], [["9", "Suffixes: 1"]], [["3", "Adds 5-6 Lightning Damage"]], [["3", "+5 to all Attributes"], ["5", " [5-6]"]], [["3", "Socketed (1)"]]]
+[["+5 to all Attributes", [["B", 5, 6, 5, "5"]]]]
+invtax False qualité 0.00
+[[["3", "Hexblade (1)"]], [["0", "(Necromancer Only)"]], [["0", "Required Level: 3"]], [["0", "Required Dexterity: 27"]], [["0", "Dagger Class - Very Fast Attack Speed"]], [["0", "Innate Fire Damage: "], ["1", "4"], ["0", " (10.0% of Dexterity)"]], [["9", "Suffixes: 1"]], [["3", "Adds 5-6 Fire Damage"]], [["3", "-4% to Enemy Cold Resistance"], ["5", " [-3 to -5]"]], [["3", "Socketed (1)"]]]
+[["-4% to Enemy Cold Resistance", [["B", 3, 5, 4, "-4% (4)"]]]]
+invkrsu False qualité 50.00
+[[["4", "Shark"]], [["5", "Short Bow (1)"]], [["4", "Eld"]], [["0", "Two-Hand Base Damage: 4 to 5"]], [["0", "Two-Hand Damage: 7 to 14"], ["0", " ("], ["3", "+83%"], ["0", ")"]], [["0", "("], ["0", "B:"], ["3", "50%"], ["5", " [35-50]"], ["0", " + "], ["0", "RW:"], ["3", "33%"], ["5", " [24-35]"], ["0", ")"]], [["0", "Required Level: 8"]], [["0", "Required Dexterity: 15"]], [["0", "Bow Class - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 5%"]], [["3", "5% Chance to cast level 9 Bloodlust on Kill"]], [["3", "+8% Bonus Damage to Bloodlust"], ["5", " [7-9]"]], [["3", "+20% Attack Speed"]], [["3", "+2 to Maximum Damage (Based on Character Level)"]], [["3", "+67% Bonus to Attack Rating"], ["5", " [50-100]"]], [["3", "27% Bonus to Attack Rating (Based on Character Level)"]], [["3", "+5 to Maximum Damage"], ["0", " ("], ["0", "R:"], ["3", "5"], ["0", ")"]], [["3", "+6% to Summon Life"], ["0", " ("], ["0", "J:"], ["3", "6%"], ["5", " [2-6]"], ["0", ")"]], [["3", "-1 to Mana"]], [["3", "Socketed (2)"]]]
+[["+8% Bonus Damage to Bloodlust", [["RW", 7, 9, 8, "8%"]]], ["+83% Enhanced Damage", [["B", 35, 50, 50, "50%"], ["RW", 24, 35, 33, "33%"]]], ["+67% Bonus to Attack Rating", [["B", 50, 100, 67, "67%"]]], ["+6% to Summon Life", [["J", 2, 6, 6, "6%"]]]]
+invsbw False qualité 73.16
+[[["5", "Warp Blade (1)"]], [["0", "One-Hand Base Damage: 7 to 10"]], [["0", "One-Hand Damage: 7 to 10"]], [["1", "(Sorceress Only)"]], [["0", "Required Level: 6"]], [["1", "Required Dexterity: 47"]], [["0", "Warp Blade - Very Fast Attack Speed"]], [["0", "Dexterity Damage Bonus: 5%"]], [["8", "Area Effect Attack"]], [["3", "Socketed (2)"]]]
+[]
+inv9cru True

@@ -1,0 +1,19 @@
+# fichiers générés par Python
+__pycache__/
+# tables et icônes extraites du jeu (reconstruites par l'éditeur ou `python extract_data.py`), ancienne copie et
+# extraction en cours
+data/
+data.old/
+data.new/
+# réglages de l'utilisateur (langue, dernier coffre, dossier du jeu, priorités…)
+settings.json
+settings.json.*
+# bibliothèque d'objets (découvertes, collection) : données de l'utilisateur
+library.json
+library.json.*
+# pages de la documentation officielle téléchargées par les tests (cache, retéléchargées à chaque version du jeu)
+tests/cache/
+# exécutable Windows construit par build_exe.py (PyInstaller)
+dist/
+# module complémentaire privé (édition, duplication) : dépôt à part, jamais dans le dépôt public
+mxl_editor/

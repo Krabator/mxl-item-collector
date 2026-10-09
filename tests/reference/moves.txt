@@ -1,0 +1,5 @@
+déplacement même page: 534de0d159
+déplacement page vide: 657c6f2850
+retour page 1: b93a1a0ece
+chevauchement: REFUS EditError (0, 0): overlaps Tir Rune at (1, 0)
+hors grille: REFUS EditError (13, 13): the item (2×3) does not fit in the 14×14 grid

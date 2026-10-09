@@ -1,0 +1,12 @@
+# Fins de ligne : LF pour le code et les textes (audit du 07/10) ; fichiers du jeu en binaire
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+# lignes CR isolées dans le texte du format : laissé tel quel
+docs/format-stash-mxl-2.14.5.md -text
+*.d2s binary
+*.stash binary
+*.shared binary
+*.bin binary
+*.tbl binary
+*.png binary
