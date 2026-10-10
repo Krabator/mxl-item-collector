@@ -25,10 +25,10 @@ from mxl_data import Data
 from mxl_rules import CLASSES
 from mxl_format import FormatError
 from mxl_save import (read_items, stash_box, parse_stash, is_character, last_page, move_item, move_between, transfer_item, placement_error, EditError,
-                      load_character)
+                      load_character, edit_stash, blob_item)
 from dataclasses import replace
 from mxl_containers import STASH, character_containers, place, cube_status
-from mxl_grid import ItemGrid
+from mxl_grid import ItemGrid, FloatingIcon
 from mxl_widgets import AutoScrollbar, OneLineLabel
 from mxl_char_view import CharacterView
 from mxl_edit import global_priorities
@@ -83,6 +83,9 @@ class App(DetailHost):
         self.char_error = None    # erreur de lecture du personnage (.d2s présent mais illisible), affichée en bas
         self.drag = None          # glisser-déposer en cours : objet, case saisie dans l'objet, case visée
         self.tab_hover = None     # (onglet survolé, id du minuteur) pendant un glisser-déposer
+        # objet « en main » (posé par un clic, sans bouton enfoncé ; start_carry) : objet, octets, case tenue, suivant
+        self.carry = None
+        self.floating = FloatingIcon(root)   # image de l'objet sous la souris (glisser-déposer, objet en main)
         self.backups_done = set()   # fichiers déjà sauvegardés (.bak) pendant cette session : voir needs_backup
         self.last_edit_backup = None   # sauvegarde faite par la dernière édition (annoncée dans la barre du bas)
         # priorités des stats (étoiles) par profil d'objet, communes à tous les personnages : {profil: {stat: n}} ;
@@ -265,6 +268,7 @@ class App(DetailHost):
         canvas.bind('<ButtonRelease-1>', self.on_release)
         canvas.bind('<Motion>', self.on_motion)
         canvas.bind('<Leave>', lambda e: self.show_status())
+        canvas.bind('<Button-3>', lambda e: self.on_item_menu(e, self.item_at(e)))   # menu de l'objet (module)
 
         right = ttk.Frame(body, padding=(8, 0, 0, 0))
         right.pack(side='left', fill='both', expand=True)
@@ -358,7 +362,7 @@ class App(DetailHost):
 
     def hover_worn(self, it):
         """Survol du panneau du personnage : nom de l'objet dans la barre du bas."""
-        if self.drag:
+        if self.drag or self.carry:
             return
         if it:
             self.status.configure(text=self.full_name(it))
@@ -623,7 +627,11 @@ class App(DetailHost):
         return self.grid.item_at(ev)
 
     def on_click(self, ev):
-        """Clic dans la grille de droite : objet sélectionné, début d'un éventuel glisser-déposer."""
+        """Clic dans la grille de droite : objet sélectionné, début d'un éventuel glisser-déposer ; objet en main :
+        posé ici (carry_drop)."""
+        if self.carry:
+            self.carry_drop(ev)
+            return 'break'
         self.selected = self.item_at(ev)
         self.draw_grid()
         self.char_view.draw()
@@ -631,7 +639,11 @@ class App(DetailHost):
         self.start_drag(ev, 'main', self.selected)
 
     def on_bag_click(self, ev):
-        """Clic dans le sac du personnage : objet sélectionné, début d'un éventuel glisser-déposer."""
+        """Clic dans le sac du personnage : objet sélectionné, début d'un éventuel glisser-déposer ; objet en main :
+        posé ici."""
+        if self.carry:
+            self.carry_drop(ev)
+            return 'break'
         it = self.char_view.bag.item_at(ev)
         self.select_worn(it)
         self.start_drag(ev, 'bag', it)
@@ -646,7 +658,7 @@ class App(DetailHost):
         grid, path, where = zone[:3]
         cx, cy = grid.cell_at(ev)
         self.drag = dict(item=it, dx=cx - it['x'], dy=cy - it['y'], target=None, src=src, path=path, where=where,
-                         view=self.view.get())
+                         view=self.view.get(), grid=grid)
 
     def zones(self):
         """Grilles où un objet peut être pris ou déposé : {nom: (grille, fichier, conteneur, page, objets)} — 'main' :
@@ -712,25 +724,28 @@ class App(DetailHost):
         return target
 
     def switch_tab(self, tab):
+        """Survol d'un onglet pendant un glissement ou avec un objet en main : page affichée."""
         self.tab_hover = None
-        if self.drag:
-            self.drag['target'] = None
+        d = self.drag or self.carry
+        if d:
+            d['target'] = None
             self.notebook.select(tab)
-            it = self.drag['item']
-            self.root.after(50, lambda: self.status.configure(
-                text=tr('status.drop_here', page=tab + 1, item=self.full_name(it))))
+            name = d.get('name') or self.full_name(d['item'])
+            self.root.after(50, lambda: self.status.configure(text=tr('status.drop_here', page=tab + 1, item=name)))
 
     def switch_view(self, view):
-        """Pendant un glissement : affiche l'autre coffre ou le cube (même page si elle existe), l'objet reste « en main » ; déposé, il y sera
-        transféré (on_release)."""
+        """Pendant un glissement ou avec un objet en main (10/10 : survol des boutons aussi en main) : affiche l'autre
+        coffre ou le cube (même page si elle existe), l'objet reste « en main » ; déposé, il y sera transféré
+        (on_release) ou écrit (carry_drop)."""
         self.tab_hover = None
-        if self.drag:
-            self.drag['target'] = None
+        d = self.drag or self.carry
+        if d:
+            d['target'] = None
             self.view.set(view)
             self.open_view(keep_page=True)
-            it = self.drag['item']
+            name = d.get('name') or self.full_name(d['item'])
             self.root.after(50, lambda: self.status.configure(
-                text=tr('status.drop_here_stash', stash=self.stash_name(view), item=self.full_name(it))))
+                text=tr('status.drop_here_stash', stash=self.stash_name(view), item=name)))
 
     def stash_name(self, view):
         return tr(dict(VIEWS)[view])
@@ -741,24 +756,36 @@ class App(DetailHost):
         changement de page ou de coffre après un court délai."""
         if not self.drag:
             return
+        d = self.drag
+        if self.floating.win is None:   # image de l'objet sous la souris, à la case saisie (10/10)
+            g = d['grid']
+            self.floating.show(g, d['item'], ev.x_root, ev.y_root, (d['dx'] * g.cell + g.cell // 2,
+                                                                     d['dy'] * g.cell + g.cell // 2))
+        self.floating.move(ev.x_root, ev.y_root)
+        self.show_drop_target(ev, d)
+
+    def show_drop_target(self, ev, d):
+        """Glisser-déposer ou objet en main d : cases visées éclairées (rouge si impossible), survol d'un onglet ou
+        d'un bouton de coffre = changement de page ou de coffre après un court délai ; message dans la barre."""
         grids = [z[0] for z in self.zones().values()]
         if self.watch_tab(ev) is not None:   # souris sur les onglets : pas de dépôt possible
             for g in grids:
                 g.clear_drop()
-            self.drag['target'] = None
+            d['target'] = None
             return
-        zone, x, y, ok = self.drop_target(ev, self.drag)
-        if self.drag['target'] == (zone, x, y):
+        zone, x, y, ok = self.drop_target(ev, d)
+        if d['target'] == (zone, x, y):
             return
-        self.drag['target'] = (zone, x, y) if zone else None
+        d['target'] = (zone, x, y) if zone else None
         for g in grids:
             g.clear_drop()
-        it = self.drag['item']
+        it = d['item']
         if zone is None:
             self.show_status()
             return
         self.zones()[zone][0].show_drop(it, x, y, ok)
-        self.status.configure(text=tr('status.move_to', item=self.full_name(it), x=x, y=y) if ok
+        self.status.configure(text=tr('status.carry_to' if d is self.carry else 'status.move_to',
+                                      item=d.get('name') or self.full_name(it), x=x, y=y) if ok
                               else tr('status.drop_invalid', x=x, y=y))
 
     def on_release(self, ev):
@@ -766,6 +793,8 @@ class App(DetailHost):
         (move_item), entre le sac et le cube du même personnage (move_between, une écriture) ou d'un fichier à l'autre
         (transfer_item : coffre, coffre partagé, cube, sac)."""
         d, self.drag = self.drag, None
+        if not self.carry:   # (un clic qui pose un objet en main en reprend un autre avec Ctrl : image gardée)
+            self.floating.hide()
         if self.tab_hover:
             self.root.after_cancel(self.tab_hover[1])
             self.tab_hover = None
@@ -830,8 +859,123 @@ class App(DetailHost):
             self.read_character(self.char_file)
             self.char_view.draw()
 
+    # ---------------------------------------------------------------- objet en main, menu de l'objet
+    def source_of(self, it):
+        """(fichier, conteneur) d'un objet affiché : coffre ou cube de droite, sac, objet porté, objet du mercenaire."""
+        if self.in_mercenary(it):
+            return self.char_file, 'mercenary'
+        if self.in_character(it):
+            return self.char_file, place(it)
+        return self.path, self.box.key
+
+    def on_item_menu(self, ev, it):
+        """Clic droit sur un objet (coffre, coffre partagé, cube, sac, objet porté) : menu des actions du module
+        mxl_editor (point d'accroche item_menu : [(libellé, fonction)]) ; sans le module ou sans action : rien. Objet en
+        main : annulé."""
+        if self.carry:
+            self.cancel_carry()
+            return 'break'
+        make = hook('item_menu')
+        actions = make(self, it) if make and it is not None and not self.drag else None
+        if not actions:
+            return None
+        self.selected = it
+        self.draw_grid()
+        self.char_view.draw()
+        self.set_detail(it)
+        menu = tk.Menu(self.root, tearoff=False)
+        for label, action in actions:
+            menu.add_command(label=label, command=action)
+        menu.tk_popup(ev.x_root, ev.y_root)
+        return 'break'
+
+    def start_carry(self, it, blob, name, next_copy=None):
+        """Objet « en main » (10/10, duplication du module) : it (objet lu des octets blob, sans fichier) suit la
+        souris ; clic gauche sur une place libre d'une grille (coffre, coffre partagé, cube, sac ; page ou coffre
+        changés au survol des onglets et des boutons) : posé là (carry_drop) ; Ctrl + clic : posé, et next_copy()
+        (nouveaux octets) reste en main ; Échap ou clic droit : annulé, rien d'écrit."""
+        g = self.grid
+        w, h = g.size(it)
+        self.carry = dict(item=it, blob=blob, name=name, next_copy=next_copy, dx=w // 2, dy=h // 2, target=None,
+                          path=None, where=None)
+        px, py = self.root.winfo_pointerxy()
+        # image tenue par la case (dx, dy), comme les cases éclairées sous la souris
+        self.floating.show(g, it, px, py, ((w // 2) * g.cell + g.cell // 2, (h // 2) * g.cell + g.cell // 2))
+        self.root.bind_all('<Motion>', self.carry_motion)
+        self.root.bind_all('<Escape>', lambda e: self.cancel_carry())
+        self.status.configure(text=tr('status.carry', item=name))
+
+    def carry_motion(self, ev):
+        """Objet en main : image sous la souris, cases visées éclairées (comme un glisser-déposer)."""
+        if not self.carry:
+            return
+        self.floating.move(ev.x_root, ev.y_root)
+        self.show_drop_target(ev, self.carry)
+
+    def end_carry(self):
+        """Fin de l'objet en main : image, surbrillance et liaisons retirées."""
+        self.carry = None
+        self.floating.hide()
+        self.root.unbind_all('<Motion>')
+        self.root.unbind_all('<Escape>')
+        if self.tab_hover:
+            self.root.after_cancel(self.tab_hover[1])
+            self.tab_hover = None
+        for z in self.zones().values():
+            z[0].clear_drop()
+
+    def cancel_carry(self):
+        """Échap ou clic droit : l'objet en main est abandonné, rien n'est écrit."""
+        name = self.carry['name'] if self.carry else ''
+        self.end_carry()
+        self.draw_grid()
+        self.show_status()
+        self.status.configure(text=tr('status.carry_cancelled', item=name))
+
+    def carry_drop(self, ev):
+        """Clic avec un objet en main : posé à la place visée si elle est libre (edit_stash : insertion contrôlée,
+        sauvegarde, relecture ; refus si le jeu est ouvert : message et objet abandonné) ; Ctrl + clic : un nouvel
+        exemplaire (next_copy) reste en main."""
+        d = self.carry
+        zone, x, y, ok = self.drop_target(ev, d)
+        if zone is None or not ok:
+            if zone is not None:
+                self.status.configure(text=tr('status.drop_invalid', x=x, y=y))
+            return
+        _, path, where, page, _ = self.zones()[zone]
+        try:
+            bak = edit_stash(path, self.data, insert=[(page, x, y, d['blob'])], backup=self.needs_backup(path),
+                             where=where)
+        except (EditError, FormatError, OSError) as e:
+            self.end_carry()
+            messagebox.showerror(tr('err.carry.title'), str(e))
+            self.refresh_files()
+            return
+        self.backup_made(path, bak)
+        if zone == 'bag':
+            place_text = tr('status.place_bag', x=x, y=y)
+        elif self.box.pages == 1:
+            place_text = tr('status.place_cube', x=x, y=y)
+        else:
+            place_text = tr('status.place_stash', stash=self.stash_name(self.view.get()), page=page + 1, x=x, y=y)
+        nxt = None
+        if getattr(ev, 'state', 0) & 0x0004 and d['next_copy']:   # Ctrl + clic : un autre exemplaire en main
+            try:
+                nxt = d['next_copy']()
+            except EditError as e:
+                messagebox.showerror(tr('err.carry.title'), str(e))
+        self.end_carry()
+        self.refresh_files()
+        self.draw_grid()
+        self.char_view.draw()
+        text = tr('status.dropped', item=d['name'], place=place_text) + (
+            tr('status.backup', file=os.path.basename(bak)) if bak else '')
+        if nxt is not None:
+            self.start_carry(blob_item(nxt, self.data), nxt, d['name'], d['next_copy'])
+        self.status.configure(text=text)
+
     def on_motion(self, ev):
-        if self.drag:
+        if self.drag or self.carry:
             return
         it = self.item_at(ev)
         if it:

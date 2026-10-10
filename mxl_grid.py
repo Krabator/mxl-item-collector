@@ -164,3 +164,62 @@ class ItemGrid:
 
     def clear_drop(self):
         self.canvas.delete('depot')
+
+
+class FloatingIcon:
+    """Image d'un objet qui suit la souris (glisser-déposer, objet « en main ») : petite fenêtre sans bord, au-dessus
+    de tout, que la souris traverse (Windows : WS_EX_TRANSPARENT) pour que la grille dessous reçoive les mouvements et
+    les clics (10/10). offset : point de l'image placé sous la souris (pixels depuis son coin haut gauche)."""
+    ALPHA = 0.85
+
+    def __init__(self, root):
+        self.root, self.win, self.offset = root, None, (0, 0)
+        # calques affichés : références propres (la réserve de la grille est vidée à chaque changement de coffre, ce
+        # qui effaçait l'image de l'objet en main, 10/10)
+        self.images = None
+
+    def show(self, grid, it, x_root, y_root, offset):
+        """Image de it (calques de la grille grid, fond d'une case) avec offset sous la souris."""
+        self.hide()
+        w, h = grid.size(it)
+        pw, ph = w * grid.cell - 1, h * grid.cell - 1
+        self.win = win = tk.Toplevel(self.root)
+        win.overrideredirect(True)
+        win.attributes('-topmost', True)
+        win.attributes('-alpha', self.ALPHA)
+        c = tk.Canvas(win, width=pw, height=ph, bg=CELL_OK, highlightthickness=0, bd=0)
+        c.pack()
+        imgs = self.images = grid.icon(it, CELL_OK, (pw, ph))
+        if imgs:
+            for k in (1, 2, 3):
+                if imgs[k] is not None and k in LAYERS_SHOWN:
+                    c.create_image(0, 0, image=imgs[k], anchor='nw')
+        else:
+            c.create_text(pw / 2, ph / 2, text=short_name(it), fill=item_color(it, grid.host.data), font=grid.font,
+                          width=pw - 4, justify='center')
+        self.offset = offset
+        self.move(x_root, y_root)
+        win.update_idletasks()
+        self._click_through(win)
+
+    @staticmethod
+    def _click_through(win):
+        """La souris traverse la fenêtre (Windows) ; ailleurs, rien (l'image reste sous la souris)."""
+        try:
+            import ctypes
+            user32 = ctypes.windll.user32
+            hwnd = user32.GetParent(win.winfo_id()) or win.winfo_id()
+            style = user32.GetWindowLongW(hwnd, -20)   # GWL_EXSTYLE
+            user32.SetWindowLongW(hwnd, -20, style | 0x80000 | 0x20)   # WS_EX_LAYERED | WS_EX_TRANSPARENT
+        except (AttributeError, OSError):
+            pass
+
+    def move(self, x_root, y_root):
+        if self.win is not None:
+            self.win.geometry(f'+{x_root - self.offset[0]}+{y_root - self.offset[1]}')
+
+    def hide(self):
+        if self.win is not None:
+            self.win.destroy()
+            self.win = None
+        self.images = None

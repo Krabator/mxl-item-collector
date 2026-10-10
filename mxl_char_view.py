@@ -82,6 +82,9 @@ class CharacterView:
         self.bag.canvas.bind('<Motion>', lambda e: host.hover_worn(self.bag.item_at(e)))
         for c in (self.canvas, self.bag.canvas):
             c.bind('<Leave>', lambda e: host.hover_worn(None))
+        # menu de l'objet (module mxl_editor : duplication) ; objet en main : annulé
+        self.canvas.bind('<Button-3>', lambda e: host.on_item_menu(e, self.item_at(e)))
+        self.bag.canvas.bind('<Button-3>', lambda e: host.on_item_menu(e, self.bag.item_at(e)))
 
     def mercenary(self):
         """Vrai si le panneau affiche le mercenaire (choisi, et le personnage en a un)."""
@@ -177,6 +180,8 @@ class CharacterView:
                      if x0 <= ev.x < x1 and y0 <= ev.y < y1), None)
 
     def on_click(self, ev):
+        if self.host.carry:   # objet en main : pas de dépôt sur un emplacement porté
+            return 'break'
         for (_, k), (x0, y0, x1, y1) in self.tabs.items():   # onglet I / II : autre jeu d'armes affiché
             if x0 <= ev.x < x1 and y0 <= ev.y < y1 and not self.mercenary():
                 self.weapon_set = k

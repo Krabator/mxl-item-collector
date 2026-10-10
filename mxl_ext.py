@@ -5,6 +5,7 @@ copie pas. Le module mxl_editor (dossier à côté du programme, ou inclus dans 
 points d'accroche (fonctions qu'il définit, appelées par la base si elles existent) :
 - library_buttons(window, parent) : boutons ajoutés sous l'infobulle de l'écran Library (« Copy to the stash »),
   [bouton] ;
+- item_menu(app, it) : actions du clic droit sur un objet affiché (« Duplicate »), [(libellé, fonction)] ou None ;
 - panel_editor(panel) : partie active de la section Editing d'un panneau de détail (titre, Ethereal / Max sockets,
   quantité, curseurs actifs) ;
 - commit_edit(app, it, edit) : écriture d'une modification (contrôles, sauvegarde, relecture).

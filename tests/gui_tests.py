@@ -124,6 +124,17 @@ def shark():
     return next(i for i in app.items if i['code'] == '160 ')
 
 
+def floating_shown():
+    """Image de l'objet sous la souris affichée, ses calques encore connus de Tk (une image libérée laisse la petite
+    fenêtre vide : défaut du 10/10 après un changement de coffre)."""
+    win = app.floating.win
+    if win is None or not win.winfo_ismapped():
+        return False
+    c = win.winfo_children()[0]
+    names = [c.itemcget(i, 'image') for i in c.find_all() if c.type(i) == 'image']
+    return bool(names) and all(n in root.image_names() for n in names)
+
+
 def free_spot(page, w, h, avoid=None):
     occ = set()
     for o in app.items:
@@ -219,6 +230,11 @@ def smoke():
     pw, ph, gx, gy = pop.winfo_width(), pop.winfo_height(), pop.winfo_rootx(), pop.winfo_rooty()
     check(abs(gx - px) <= pw + 40 and abs(gy - py) <= ph + 40, f'explication : {gx},{gy} {pw}x{ph}, souris {px},{py}')
     hover.hide()
+    # clic droit sur un objet : menu du module seulement (base seule : rien, aucun objet en main)
+    if not EDITOR:
+        it = next(i for i in app.items if i['code'] == '7@5 ')
+        app.notebook.select(it['page']); root.update()
+        check(app.on_item_menu(cell(it['x'], it['y']), it) is None and app.carry is None, 'menu du clic droit sans le module')
     check(not errors, f'erreurs : {errors}')
     finish()
 
@@ -233,7 +249,10 @@ def drag1():
     app.notebook.select(sh['page'])
     root.update()
     fx, fy = free_spot(sh['page'], w, h, avoid=sh)
-    app.on_click(cell(sh['x'], sh['y'])); app.on_drag(cell(fx, fy)); app.on_release(cell(fx, fy)); root.update()
+    app.on_click(cell(sh['x'], sh['y'])); app.on_drag(cell(fx, fy)); root.update()
+    check(app.floating.win is not None and app.floating.win.winfo_ismapped(), "image de l'objet absente pendant le glissement")
+    app.on_release(cell(fx, fy)); root.update()
+    check(app.floating.win is None, "image de l'objet restée après le dépôt")
     sh2 = shark()
     check((sh2['page'], sh2['x'], sh2['y']) == (sh['page'], fx, fy), f"même page : Shark en {sh2['page'], sh2['x'], sh2['y']}")
     state['target'] = next(p for p in range(mxl_gui.STASH.pages) if not any(i['page'] == p for i in app.items))
@@ -763,7 +782,9 @@ def xfer():
     spot = free_spot_(app.items, sh, app.data, pages=[app.page()])
     check(spot is not None, 'pas de place libre dans la page du coffre partagé')
     _, fx, fy = spot
-    app.on_drag(cell(fx, fy)); app.on_release(cell(fx, fy)); root.update()
+    app.on_drag(cell(fx, fy)); root.update()
+    check(floating_shown(), "image de l'objet effacée par le changement de coffre pendant le glissement")
+    app.on_release(cell(fx, fy)); root.update()
     got = next((i for i in app.items if (i['page'], i['x'], i['y']) == (sh['page'], fx, fy)), None)
     check(got and got['code'] == sh['code'] and len(got['socketed']) == len(sh['socketed']), 'objet absent du coffre partagé')
     check((len(app.items), len(parse_stash(P, app.data))) == (n_dst + 1, n_src - 1), 'nombres d\'objets après le transfert')
