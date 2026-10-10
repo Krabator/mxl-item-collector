@@ -8,14 +8,14 @@ show_detail, draw_image et place_image.
 """
 import ttkbootstrap as ttk
 from i18n import tr
-from mxl_library import TIERS, base_tier, storage_parts
+from mxl_library import TIERS, base_tier, storage_parts, storage_double
 from mxl_theme import STORED_COLOR, CELL_KO, CELL_OK
 from mxl_tooltip import requirements_unmet, item_tooltip
 from mxl_widgets import AutoScrollbar
 
 # onglet Storage : colonnes du tableau des supérieurs stockés, dans l'ordre, et largeurs
-STORAGE_COLUMNS = ('base', 'category', 'sockets', 'ethereal', 'quality', 'date')   # provenance : panneau de détail seulement
-STORAGE_WIDTHS = dict(base=220, category=85, sockets=70, ethereal=80, quality=80, date=130)
+STORAGE_COLUMNS = ('base', 'category', 'sockets', 'double', 'ethereal', 'quality', 'date')   # provenance : panneau de détail seulement
+STORAGE_WIDTHS = dict(base=220, category=85, sockets=70, double=110, ethereal=80, quality=80, date=130)
 
 
 class StorageTab:
@@ -98,6 +98,7 @@ class StorageTab:
                 continue
             q = self.stored_quality(slot)
             rows.append((slot, dict(base=base.name, category=tr('library.cat.' + base.kind), sockets=sockets,
+                                    double=tr('library.storage_double') if storage_double(slot) else '',
                                     ethereal=tr('library.view.ethereal') if eth else '',
                                     quality=q, date=e['date'])))
         col, desc = self.ssort

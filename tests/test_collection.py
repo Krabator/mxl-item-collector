@@ -308,7 +308,7 @@ def superior_storage(ctx, copy=None):
     lib = Library(os.path.join(ctx.tmp, 'library.json'))
     items = parse_stash(p, data)
     sup = lambda code: next(i for i in items if i['code'] == code and i.get('quality') == 'superior')
-    ctx.expect('places', [storage_key(sup(c), data) for c in ('277 ', '607 ')], ['superior:277:s4', 'superior:607:s1:eth'])
+    ctx.expect('places', [storage_key(sup(c), data) for c in ('277 ', '607 ')], ['superior:277:s4:db', 'superior:607:s1:db:eth'])
     runic = dict(sup('277 '), socketed=[dict(code='r01 ')])   # objet serti : supérieur runique
     ctx.expect('exclus : runique, sans socket ; jamais au catalogue',
                (storage_key(runic, data), storage_key(dict(quality='superior', code='277 ', sockets=0), data),
@@ -358,3 +358,37 @@ def superior_storage(ctx, copy=None):
     before = n()
     take_out(p, data, lib, wkey, backup=False)
     ctx.expect('sortie', (n(), wkey in lib.storage, akey in lib.storage), (before + 1, False, True))
+
+
+@case('Collection', 'stockage des supérieurs : double bonus à part (armure : Physical Resist + ED ; arme : AR + ED), places reprises')
+def superior_double(ctx):
+    """Même objet de base, mêmes sockets : double bonus et bonus simple gardés tous les deux (10/10) ; Heavy Boots
+    2 sockets avec et sans +1 % Physical Resist, arme (277) avec et sans % Bonus to Attack Rating ; ancienne place d'un
+    double bonus : reprise par rekey_storage, une seule fois, rien de perdu."""
+    import base64
+    from mxl_library import DOUBLE, storage_double
+    data = ctx.data
+    p = ctx.copy(CONTAINERS, 'r.shared')
+    lib = Library(os.path.join(ctx.tmp, 'library.json'))
+    keys = []
+    for code, stat in (('730 ', 36), ('277 ', 119)):
+        it = next(i for i in parse_stash(p, data) if i['code'] == code and i.get('quality') == 'superior')
+        blob = bytearray(item_blob(read_file(p), it))
+        set_raw_stat(blob, blob_item(bytes(blob), data), stat, 0, data)   # même objet, bonus simple
+        spot = free_spot(parse_stash(p, data), it, data, box=SHARED)
+        edit_stash(p, data, insert=[(*spot, bytes(blob))], backup=False)
+        keys += sorted(storage_key(i, data) for i in parse_stash(p, data) if i['code'] == code and i.get('quality') == 'superior')
+    ctx.expect('places', keys, ['superior:730:s2', 'superior:730:s2' + DOUBLE, 'superior:277:s4', 'superior:277:s4' + DOUBLE])
+    plan = [a for a in plan_transfer(parse_stash(p, data), lib, data, {}) if a['key'] in keys]
+    ctx.expect('tous stockés', sorted((a['kind'], a['key']) for a in plan), sorted(('store', k) for k in keys))
+    apply_transfer(p, data, lib, plan, backup=False)
+    ctx.expect('stockage', (sorted(k for k in lib.storage if k in keys) == sorted(keys), [storage_double(k) for k in keys]),
+               (True, [False, True, False, True]))
+    # bibliothèque plus ancienne : double bonus rangé sans DOUBLE (ou avec l'ancien suffixe :pr), repris à sa place
+    old = Library(os.path.join(ctx.tmp, 'old.json'))
+    old.storage['superior:730:s2'] = dict(lib.storage[keys[1]])
+    old.storage['superior:277:s4:pr'] = dict(lib.storage[keys[3]])
+    ctx.expect('reprise', (old.rekey_storage(data), sorted(old.storage), old.rekey_storage(data)),
+               (2, sorted([keys[1], keys[3]]), 0))
+    ctx.check(base64.b64decode(old.storage[keys[1]]['blob']) == base64.b64decode(lib.storage[keys[1]]['blob']),
+              'objet changé par la reprise')

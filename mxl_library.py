@@ -180,22 +180,43 @@ def two_variants(key, data):
     return data.base(code).kind in ('weapons', 'armor') and not always_ethereal(key, data) and not no_ethereal(code, data)
 
 
-STORAGE = 'superior'   # préfixe des places du stockage des supérieurs ('superior:<code>:s<sockets>[:eth]')
+STORAGE = 'superior'   # préfixe des places du stockage des supérieurs ('superior:<code>:s<sockets>[:db][:eth]')
+DOUBLE = ':db'   # place d'un supérieur à double bonus, à part de celle à bonus simple (double_bonus, 10/10)
 PHYSICAL_RESIST = 36   # stat « Physical Resist » : +1 % au plus sur une armure supérieure (règle du 06/10)
+ENHANCED_DEFENSE = 16  # stat « Enhanced Defense » : bonus de toute armure supérieure
 ENHANCED_DAMAGE = 17   # stat « Enhanced Damage » (max ; 18 = min, liée)
+ATTACK_RATING = 119    # stat « % Bonus to Attack Rating » : 2e bonus possible d'une arme supérieure
 MOVEMENT_SPEED = 96    # stat « Movement Speed » : bottes supérieures, gardées sur elle d'abord (règle du 06/10)
 
 
 def storage_key(it, data):
     """Place de l'objet dans le stockage des supérieurs (hors collection : ni découverte, ni avancement), ou None :
     supérieur, arme ou armure, au moins un socket, aucun objet serti (objets runiques exclus) ; une place par objet de
-    base et nombre de sockets, plus ETHEREAL pour un exemplaire éthéré (décisions du 06/10)."""
-    if it.get('quality') != 'superior' or data.base(it['code']).kind not in ('weapons', 'armor'):
+    base et nombre de sockets, plus ETHEREAL pour un exemplaire éthéré (décisions du 06/10) ; double bonus
+    (double_bonus) : place à part, DOUBLE (10/10 : deux paires de bottes 30 % / 2 sockets, l'une avec +1 % Physical
+    Resist, l'autre sans, gardées toutes les deux)."""
+    kind = data.base(it['code']).kind
+    if it.get('quality') != 'superior' or kind not in ('weapons', 'armor'):
         return None
     if not it.get('sockets') or it.get('socketed') or (it.get('ethereal') and no_ethereal(it['code'], data)):
         return None
     key = f"{STORAGE}:{it['code'].strip()}:s{it['sockets']}"
+    if double_bonus(it, data):
+        key += DOUBLE
     return key + ETHEREAL if it.get('ethereal') else key
+
+
+def double_bonus(it, data):
+    """Supérieur à double bonus (règle du 10/10) : armure (bottes comprises) avec +1 % Physical Resist et Enhanced
+    Defense ; arme avec % Bonus to Attack Rating et Enhanced Damage. Bonus simple : Enhanced Defense ou Enhanced
+    Damage seul (armes sans Enhanced Damage, comme certains bâtons : jamais double)."""
+    has = lambda sid: any(s['id'] == sid and s['value'] > 0 for s in it.get('stats', []))
+    kind = data.base(it['code']).kind
+    if kind == 'armor':
+        return has(PHYSICAL_RESIST) and has(ENHANCED_DEFENSE)
+    if kind == 'weapons':
+        return has(ATTACK_RATING) and has(ENHANCED_DAMAGE)
+    return False
 
 
 def is_storage(slot):
@@ -205,8 +226,13 @@ def is_storage(slot):
 
 def storage_parts(slot):
     """(code de l'objet de base, nombre de sockets, éthéré) d'une place du stockage."""
-    _, code, sockets = entry_of(slot).split(':')
+    _, code, sockets = entry_of(slot).split(':')[:3]
     return code, int(sockets[1:]), slot.endswith(ETHEREAL)
+
+
+def storage_double(slot):
+    """Vrai pour une place du stockage à double bonus (DOUBLE)."""
+    return entry_of(slot).endswith(DOUBLE)
 
 
 def slot_key(it, data):
@@ -295,6 +321,18 @@ class Library:
         """Stockage des supérieurs : {place (storage_key): même forme que collection} ; hors collection (ni compté dans
         l'avancement, ni découvertes)."""
         return self.state.setdefault('storage', {})
+
+    def rekey_storage(self, data):
+        """Supérieurs stockés dont la place a changé de règle (10/10 : double bonus à part, DOUBLE)
+        déplacés vers leur place actuelle (storage_key), si elle est libre ; rien n'est perdu (place occupée : laissé
+        tel quel). Renvoie le nombre de déplacés (à enregistrer : save)."""
+        moved = 0
+        for key, e in list(self.storage.items()):
+            new = storage_key(blob_item(base64.b64decode(e['blob']), data), data)
+            if new and new != key and new not in self.storage:
+                self.storage[new] = self.storage.pop(key)
+                moved += 1
+        return moved
 
     def slots(self, key):
         """Section de la bibliothèque qui range cette place : storage (supérieurs) ou collection."""

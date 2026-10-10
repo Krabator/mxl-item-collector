@@ -112,6 +112,8 @@ class App(DetailHost):
         self.library = Library(LIBRARY_FILE, lock=True)
         if self.library.readonly:   # fichier illisible ou bibliothèque déjà ouverte : rien ne sera écrit
             messagebox.showwarning(tr('library.readonly_title'), self.library.readonly)
+        elif self.library.rekey_storage(self.data):   # places du stockage selon la règle actuelle (Physical Resist)
+            self.library.save()
         self.catalog = {e['key']: e for e in catalog(self.data)}   # entrées du catalogue par clé
         self.library_ui = LibraryUI(self)   # écran « Library », bouton, découvertes, transfert
         self._build()

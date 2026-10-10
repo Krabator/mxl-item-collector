@@ -7,7 +7,7 @@ Noms des places (slot_name, slot_base) : écran Library et fenêtre de transfert
 """
 from dataclasses import dataclass
 from i18n import tr
-from mxl_library import ETHEREAL, entry_of, is_storage, storage_parts
+from mxl_library import ETHEREAL, entry_of, is_storage, storage_parts, storage_double
 
 
 @dataclass
@@ -76,7 +76,8 @@ def slot_name(catalog, slot, data=None):
     stockage des supérieurs (data requis) : objet de base et nombre de sockets."""
     if is_storage(slot):
         code, sockets, _ = storage_parts(slot)
-        name = tr('library.storage_name', base=data.base(code.ljust(4)).name, n=sockets)
+        name = tr('library.storage_name_double' if storage_double(slot) else 'library.storage_name',
+                  base=data.base(code.ljust(4)).name, n=sockets)
     else:
         name = catalog[entry_of(slot)]['name']
     return name + tr('library.ethereal_suffix') if slot.endswith(ETHEREAL) else name
