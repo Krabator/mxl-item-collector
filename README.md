@@ -51,6 +51,9 @@ Download the zip of the latest version from the [Releases](https://github.com/Kr
 page, unzip it anywhere and run `MXL Item Collector.exe` (no installation, no Python needed). On first launch, choose
 your Median XL installation folder.
 
+The executable is not digitally signed: Windows may show "Windows protected your PC" the first time. Click
+"More info", then "Run anyway".
+
 ### From source
 
 Requires Windows and Python 3.10 or later.
