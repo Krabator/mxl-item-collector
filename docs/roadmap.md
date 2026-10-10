@@ -20,6 +20,7 @@ La documentation technique est ailleurs :
   - interface (`gui_tests.py`, un processus par test) ; `data/` inchangé ;
   - module complémentaire privé `mxl_editor` (s'il est présent : ses tests sont dans son dossier). Deux campagnes : sans option, base + module ; **`--base` : base seule** (module ignoré même présent, comme la version publique). Les deux doivent finir par « TOUT EST OK ».
   Coffres figés dans `tests/fixtures/` (le 2e dans `stash2/`), résultats attendus dans `tests/reference/` (`--update` après un changement d'affichage voulu et vérifié ; `--no-gui` sans l'interface ; `-k texte` : seulement les cas dont le titre contient ce texte ; `--slow` : en plus, construction et essai de l'exécutable Windows (environ 30 s) et reconstruction complète de `data/` depuis le jeu (environ 15 s), à lancer quand l'extraction ou l'emballage changent).
+- **Versions** : numéro dans `version.py` (titre de la fenêtre, zip de l'exécutable) ; release GitHub `v<version>` avec le zip de l'exécutable public (`python build_exe.py --check --zip`, sans le module). 0.9 : 10/10/2026.
 - Dépôt Git local : une branche par évolution, fusion dans `main` par défaut dès que les tests passent (« TOUT EST OK » vérifié), avec l'indication du commit de fusion pour revenir en arrière ; messages de commit terminés par `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 
 ## Fait

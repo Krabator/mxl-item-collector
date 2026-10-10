@@ -1,6 +1,6 @@
 """Construit l'exécutable Windows de l'éditeur (PyInstaller).
 
-Usage : python build_exe.py [--with-editor] [--check]
+Usage : python build_exe.py [--with-editor] [--check] [--zip]
 - sans option : version publique, base seule (module mxl_editor exclu même présent) :
   dist/MXL Item Collector/MXL Item Collector.exe ;
 - --with-editor : version privée, avec le module mxl_editor (édition des valeurs, copie vers le coffre) :
@@ -11,6 +11,8 @@ Usage : python build_exe.py [--with-editor] [--check]
   l'utilisateur, « MXL Item Collector » dans le dossier des sauvegardes du jeu (voir i18n.py, paths.py) ;
 - data/ (tables et icônes extraites du jeu) n'est pas livré : extrait de l'installation de Median XL de l'utilisateur
   au premier lancement, dans %LOCALAPPDATA%\\MXL Item Collector (avec les réglages).
+--zip : archive du dossier construit, à distribuer (release GitHub) : dist/MXL-Item-Collector-<version>-windows.zip
+(version.VERSION ; « -editor » pour la version privée).
 --check : contrôle que le module est embarqué (ou non) comme demandé, puis lance l'exécutable construit avec des dossiers temporaires (réglages, collection, sauvegardes, data/
 copié) et vérifie qu'il s'ouvre, ouvre le coffre du personnage (retenu dans ses réglages) et se ferme normalement.
 Prérequis : pip install pyinstaller.
@@ -147,7 +149,18 @@ def check():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def make_zip():
+    """Archive du dossier de l'exécutable (dossier « MXL Item Collector » à la racine du zip) ; renvoie son chemin."""
+    from version import VERSION
+    name = f"MXL-Item-Collector-{VERSION}-windows" + ('-editor' if WITH_EDITOR else '')
+    out = shutil.make_archive(os.path.join(DIST, name), 'zip', root_dir=DIST, base_dir=NAME)
+    print(f'Archive : {out} ({os.path.getsize(out) // 1024 // 1024} Mo)')
+    return out
+
+
 if __name__ == '__main__':
     build()
     if '--check' in sys.argv[1:] and not (check_module() and check()):
         sys.exit(1)
+    if '--zip' in sys.argv[1:]:
+        make_zip()

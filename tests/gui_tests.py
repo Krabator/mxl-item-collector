@@ -206,6 +206,8 @@ def smoke():
     check(open(P, 'rb').read() == before, 'fichier modifié alors que l\'édition est désactivée')
     import settings
     check(settings.get('last_stash') == os.path.abspath(P), 'dernier coffre ouvert non retenu dans les réglages')
+    from version import VERSION   # numéro de version dans le titre de la fenêtre (release GitHub v0.9, 10/10)
+    check(root.title() == f'MXL Item Collector {VERSION} — Nekratall.stash', f'titre : {root.title()}')
     # barre du bas toujours sur une ligne : un nom du jeu sur plusieurs lignes n'agrandit pas la fenêtre
     from mxl_gui_detail import full_name
     root.update()

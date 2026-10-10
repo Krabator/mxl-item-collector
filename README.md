@@ -47,7 +47,9 @@ Still, keep your own copy of your save folder before trying a new tool.
 
 ### Windows executable
 
-Coming later. For now, run from source (see below).
+Download the zip of the latest version from the [Releases](https://github.com/Krabator/mxl-item-collector/releases)
+page, unzip it anywhere and run `MXL Item Collector.exe` (no installation, no Python needed). On first launch, choose
+your Median XL installation folder.
 
 ### From source
 
@@ -61,7 +63,8 @@ python mxl_gui.py
 On first launch, choose your Median XL installation folder: the game tables and icons are extracted from it
 (nothing from the game is shipped with this tool).
 
-To build the executable: `pip install pyinstaller`, then `python build_exe.py` (result in `dist/`).
+To build the executable: `pip install pyinstaller`, then `python build_exe.py` (result in `dist/`; `--zip` also
+makes the archive to distribute).
 
 ## Where your data lives
 

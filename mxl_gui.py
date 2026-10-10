@@ -38,6 +38,7 @@ from mxl_library import Library, catalog, slot_key
 from paths import DATA_DIR, SAVE_DIR, LIBRARY_FILE as PATHS_LIBRARY_FILE
 from mxl_home import migrate
 from mxl_ext import editor, editor_error, hook
+from version import VERSION
 from i18n import tr
 from mxl_theme import DETAIL_BG, DETAIL_FG, FONT, DETAIL_WIDTH, DETAIL_PADX, LABEL_DIM
 from mxl_gui_install import GameInstall
@@ -101,7 +102,7 @@ class App(DetailHost):
         self.editing_setting = self.right('edition_enabled')
         self.duplication_setting = self.right('duplication_enabled')
         root.protocol('WM_DELETE_WINDOW', self.on_close)
-        root.title(tr('app.title'))
+        root.title(tr('app.title', version=VERSION))
         # dossier d'installation de Median XL (réglage game_dir, demandé au premier lancement) ; data/ reconstruit
         # (avec accord) s'il manque ou si le mod a changé de version
         self.install = GameInstall(root, DATA_DIR, on_rebuilt=self.reload_data)
@@ -308,9 +309,9 @@ class App(DetailHost):
         self.btn_game.configure(text=tr('btn.game_dir'))
         self.install.show_game()
         if self.path:
-            self.root.title(tr('app.title_file', file=os.path.basename(self.path)))
+            self.root.title(tr('app.title_file', version=VERSION, file=os.path.basename(self.path)))
         else:
-            self.root.title(tr('app.title'))
+            self.root.title(tr('app.title', version=VERSION))
         self.set_detail(self.selected)
         self.show_status()
 
@@ -468,7 +469,7 @@ class App(DetailHost):
             self.path, self.items, self.selected, self.char_file, self.files_seen = None, [], None, None, None
             self.read_character(char_file)   # personnage sans coffre : son équipement et son sac restent affichés
             self.char_view.draw()
-            self.root.title(tr('app.title'))
+            self.root.title(tr('app.title', version=VERSION))
             self.draw_grid()
             self.set_detail(None)
             self.show_status()
@@ -539,7 +540,7 @@ class App(DetailHost):
             last = last_page(path)
             if last < STASH.pages:
                 self.notebook.select(last)
-        self.root.title(tr('app.title_file', file=os.path.basename(path)))
+        self.root.title(tr('app.title_file', version=VERSION, file=os.path.basename(path)))
         self.draw_grid()
         self.char_view.draw()
         self.set_detail(self.selected)

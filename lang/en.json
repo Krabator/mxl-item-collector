@@ -1,8 +1,8 @@
 {
   "_language": "English",
   "_note": "Reference translation file. To add a language, copy this file to lang/<code>.json and translate the values (never the keys). Keep {fields} unchanged.",
-  "app.title": "Median XL — stash",
-  "app.title_file": "Median XL — {file}",
+  "app.title": "MXL Item Collector {version}",
+  "app.title_file": "MXL Item Collector {version} — {file}",
   "label.language": "Language",
   "err.data_missing.title": "Game tables not found",
   "err.data_missing.body": "Cannot read the game tables in the data/ folder ({file}).\n\nRestart the editor and select the Median XL installation folder to extract them.",
