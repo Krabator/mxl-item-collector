@@ -107,6 +107,12 @@ class LibraryWindow(StorageTab, DetailImage):
         self.progress_label.pack(side='top', anchor='w')
         self.progress = ttk.Progressbar(self.progress_box, maximum=1.0, bootstyle='warning')
         self.progress.pack(side='top', fill='x', pady=(4, 8))
+        # remise à zéro des découvertes : volontairement discrète (clic droit sur l'avancement, aucun bouton visible ;
+        # 10/10), avec confirmation (reset_found)
+        self.reset_menu = tk.Menu(self.win, tearoff=False)
+        self.reset_menu.add_command(label=tr('library.reset_found'), command=self.reset_found)
+        for w in (self.progress_label, self.progress):
+            w.bind('<Button-3>', lambda e: self.reset_menu.tk_popup(e.x_root, e.y_root))
         # collection : transfert depuis le coffre ouvert, restauration des objets détruits (dernière opération)
         actions = self.actions = ttk.Frame(top)
         actions.pack(side='top', fill='x', pady=(0, 8))
@@ -399,6 +405,25 @@ class LibraryWindow(StorageTab, DetailImage):
         if self.mode.get() == 'storage':
             return self.storage_slot()
         return self.selection.slot if self.selection.key else None
+
+    def reset_found(self):
+        """Menu du clic droit sur l'avancement : oublie les découvertes des entrées non rangées (Library.reset_found),
+        après confirmation (non par défaut) ; les entrées rangées gardent leur date."""
+        lib = self.app.library
+        forget, kept = lib.found_reset_counts()
+        if not forget:
+            messagebox.showinfo(tr('library.reset_found_title'), tr('library.reset_found_none'), parent=self.win)
+            return
+        if not messagebox.askyesno(tr('library.reset_found_title'), tr('library.reset_found_confirm', n=forget, kept=kept),
+                                   icon='warning', default='no', parent=self.win):
+            return
+        try:
+            forgotten, kept = lib.reset_found()
+        except (OSError, LibraryError) as e:
+            messagebox.showerror(tr('library.reset_found_title'), str(e), parent=self.win)
+            return
+        self.refresh()
+        self.app.status.configure(text=tr('library.reset_found_done', n=forgotten, kept=kept))
 
     def take_out(self):
         """Bouton « Take out » : l'exemplaire rangé de l'entrée sélectionnée retourne dans le coffre ouvert."""

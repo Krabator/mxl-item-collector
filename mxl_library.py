@@ -371,6 +371,26 @@ class Library:
             self.save()
         return new
 
+    def found_reset_counts(self):
+        """(découvertes oubliées par reset_found, découvertes gardées : entrées dont un exemplaire est rangé)."""
+        stored = {entry_of(k) for k in self.collection}
+        kept = sum(1 for k in self.found if k in stored)
+        return len(self.found) - kept, kept
+
+    def reset_found(self):
+        """Oublie les découvertes des entrées qui n'ont aucun exemplaire rangé dans la collection (normal ou éthéré) ;
+        celles des entrées rangées gardent leur date et leur provenance (10/10). Stockage des supérieurs : non concerné
+        (hors découvertes). Les objets encore présents dans les coffres seront retrouvés à l'ouverture de leur fichier.
+        LibraryError en lecture seule. Renvoie (oubliées, gardées)."""
+        self.check_writable()
+        stored = {entry_of(k) for k in self.collection}
+        forgotten = [k for k in self.found if k not in stored]
+        for k in forgotten:
+            del self.found[k]
+        if forgotten:
+            self.save()
+        return len(forgotten), len(self.found)
+
     def save(self):
         """Écriture sûre : fichier temporaire, copie de la version précédente dans <fichier>.bak, puis remplacement
         (dossier créé au besoin). LibraryError en lecture seule."""

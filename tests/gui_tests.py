@@ -467,6 +467,20 @@ def library():
     jared = next(i for i in app.items if i['code'] == '108 ')   # coffre : sous l'infobulle de l'objet
     app.selected = jared; app.set_detail(jared); root.update()
     check('Drops from area level 10 to 50' in app.detail.get('1.0', 'end'), 'plage de chute dans le coffre')
+    # remise à zéro des découvertes : aucun bouton, menu du clic droit sur l'avancement ; confirmation (non : rien)
+    check(all('<Button-3>' in x.bind() for x in (w.progress_label, w.progress)), "clic droit sur l'avancement")
+    check(w.reset_menu.entrycget(0, 'label') == 'Reset found items…', 'menu de remise à zéro')
+    n_found = len(app.library.found)
+    asked = []
+    messagebox.askyesno = lambda *a, **k: asked.append(k.get('default')) or False
+    w.reset_found(); root.update()
+    check(asked == ['no'] and len(app.library.found) == n_found > 0, f'refus : {asked}, {len(app.library.found)} / {n_found}')
+    messagebox.askyesno = lambda *a, **k: True
+    w.reset_found(); root.update()
+    messagebox.askyesno = lambda *a, **k: False
+    check(not app.library.found and w.progress_label.cget('text').startswith('0 / ')
+          and 'Found items reset' in app.status.cget('text'), f"remise à zéro : {len(app.library.found)}, {w.progress_label.cget('text')}")
+    check(not errors, f'erreurs : {errors}')
     finish()
 
 

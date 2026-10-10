@@ -392,3 +392,17 @@ def superior_double(ctx):
                (2, sorted([keys[1], keys[3]]), 0))
     ctx.check(base64.b64decode(old.storage[keys[1]]['blob']) == base64.b64decode(lib.storage[keys[1]]['blob']),
               'objet changé par la reprise')
+
+
+@case('Collection', 'remise à zéro des découvertes : entrées non rangées oubliées, entrées rangées gardées avec leur date')
+def reset_found(ctx):
+    s, data = Setup(ctx), ctx.data
+    s.lib.record_found(parse_stash(s.p, data), data, 'c.stash')
+    apply_transfer(s.p, data, s.lib, s.plan(), backup=False)   # Jared's Fragmentor rangée
+    stored = {k for k in s.lib.found if k == K}
+    date = s.lib.found[K]['date']
+    n = len(s.lib.found)
+    ctx.expect('comptes', s.lib.found_reset_counts(), (n - 1, 1))
+    ctx.expect('remise à zéro', (s.lib.reset_found(), set(s.lib.found), s.lib.found[K]['date']), ((n - 1, 1), stored, date))
+    again = Library(s.lib.path)   # écrit sur le disque
+    ctx.expect('relue', (set(again.found), again.reset_found()), (stored, (0, 1)))
