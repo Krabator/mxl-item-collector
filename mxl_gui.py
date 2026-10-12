@@ -10,7 +10,8 @@ bascule vers le coffre partagé (SHARED_STASH), affiché pour le même personnag
 son cube (objets du .d2s rangés dans le cube) : un coffre sans page, modifiable comme un coffre (mxl_save.ItemFile).
 À gauche, panneau repliable du personnage (mxl_char_view.CharacterView, self.char_view) : équipement (édition par
 curseurs, pas de déplacement) et sac (modifiable : glisser-déposer dans le sac et vers la grille de droite, édition) ; la sélection (self.selected) est
-commune au panneau et à la grille.
+commune au panneau et à la grille. À sa place (l'un ou l'autre), feuille de statistiques repliable du personnage et
+de son mercenaire (mxl_stats_view.StatsView, self.stats_view, bouton « Stats »).
 Personnage et coffre (du personnage / partagé) retenus dans les réglages (settings.py) et rouverts au lancement.
 
 Usage : python mxl_gui.py [fichier.stash] — ouvre ce fichier (personnage du même nom), sinon le dernier choix.
@@ -22,7 +23,6 @@ from tkinter import messagebox
 import ttkbootstrap as ttk
 
 from mxl_data import Data
-from mxl_rules import CLASSES
 from mxl_format import FormatError
 from mxl_save import (read_items, stash_box, parse_stash, is_character, last_page, move_item, move_between, transfer_item, placement_error, EditError,
                       load_character, edit_stash, blob_item)
@@ -31,6 +31,7 @@ from mxl_containers import STASH, character_containers, place, cube_status
 from mxl_grid import ItemGrid, FloatingIcon
 from mxl_widgets import AutoScrollbar, OneLineLabel
 from mxl_char_view import CharacterView
+from mxl_stats_view import StatsView
 from mxl_edit import global_priorities
 import i18n
 import settings
@@ -192,6 +193,11 @@ class App(DetailHost):
         self.btn_char = ttk.Checkbutton(top, text=tr('btn.equipment'), variable=self.show_char,
                                         command=self.toggle_character, bootstyle='info-outline-toolbutton')
         self.btn_char.pack(side='left', padx=6)
+        # feuille de statistiques : à la place du panneau du personnage (l'un ou l'autre), repliée à l'ouverture
+        self.show_stats = tk.BooleanVar(value=False)
+        self.btn_stats = ttk.Checkbutton(top, text=tr('btn.stats'), variable=self.show_stats,
+                                         command=self.toggle_stats, bootstyle='info-outline-toolbutton')
+        self.btn_stats.pack(side='left', padx=(0, 6))
         # langue de l'interface : un fichier par langue dans lang/ (voir i18n.py), choix enregistré dans settings.json
         self.languages = i18n.available()
         self.lang_combo = ttk.Combobox(top, state='readonly', width=14, values=[n for _, n in self.languages])
@@ -230,6 +236,7 @@ class App(DetailHost):
         body.pack(fill='both', expand=True)
 
         self.char_view = CharacterView(body, self)
+        self.stats_view = StatsView(body, self)
         # hauteur de la fenêtre identique panneau affiché ou replié : cale invisible de la hauteur du panneau
         self.char_view.frame.update_idletasks()
         tk.Frame(body, width=1, height=self.char_view.frame.winfo_reqheight(),
@@ -297,8 +304,11 @@ class App(DetailHost):
         i18n.set_language(code)
         self.char_title.configure(text=tr('label.character'))
         self.btn_char.configure(text=tr('btn.equipment'))
+        self.btn_stats.configure(text=tr('btn.stats'))
         self.char_view.retranslate()
         self.char_view.draw()
+        self.stats_view.retranslate()
+        self.draw_stats()
         for view, key in VIEWS:
             self.btn_views[view].configure(text=tr(key))
         self.library_ui.show_button()
@@ -327,6 +337,9 @@ class App(DetailHost):
         """Affiche ou replie le panneau du personnage ; la fenêtre reprend la taille de son contenu."""
         shown = self.show_char.get()
         if shown:
+            if self.show_stats.get():   # l'un ou l'autre : feuille de statistiques repliée
+                self.show_stats.set(False)
+                self.stats_view.frame.pack_forget()
             self.char_view.frame.pack(side='left', fill='y', before=self.stash_col)
             self.char_view.draw()
         else:
@@ -337,6 +350,30 @@ class App(DetailHost):
         self.root.minsize(1, 1)
         self.root.geometry('')
         self.fit_window()
+
+    def toggle_stats(self):
+        """Affiche ou replie la feuille de statistiques (à la place du panneau du personnage) ; un seul changement de
+        taille de la fenêtre : panneau du personnage retiré sans recalcul, feuille mesurée et dessinée avant d'être
+        affichée (sinon la fenêtre clignotait)."""
+        if self.show_stats.get():
+            self.stats_view.draw()
+            if self.show_char.get():
+                self.show_char.set(False)
+                self.char_view.frame.pack_forget()
+                if self.in_character(self.selected):   # objet sélectionné dans le panneau replié : plus de sélection
+                    self.selected = None
+                    self.set_detail(None)
+            self.stats_view.frame.pack(side='left', fill='y', before=self.stash_col)
+        else:
+            self.stats_view.frame.pack_forget()
+        self.root.minsize(1, 1)
+        self.root.geometry('')
+        self.fit_window()
+
+    def draw_stats(self):
+        """Feuille de statistiques redessinée si elle est affichée (personnage relu ou changé)."""
+        if self.show_stats.get():
+            self.stats_view.draw()
 
     def in_character(self, it):
         """Vrai si it est un objet du panneau du personnage (porté, dans le sac, ou porté par son mercenaire), pas de
@@ -381,6 +418,8 @@ class App(DetailHost):
             self.char, self.char_error = None, str(e) if isinstance(e, (FormatError, OSError)) else f'{type(e).__name__}: {e}'
         self.cube_state = self.character_cube(self.char)
         self.btn_views['cube'].state(['disabled' if self.cube_state == 'none' else '!disabled'])
+        if hasattr(self, 'stats_view'):
+            self.draw_stats()
         lib = getattr(self, 'library_ui', None)
         if lib and lib.window:   # écran « Library » ouvert : objet affiché recalculé pour ce personnage
             lib.window.show_detail()
@@ -998,10 +1037,9 @@ class App(DetailHost):
         cube = self.box.pages == 1
         self.count_total.configure(text=tr('count.cube' if cube else 'count.stash', n=len(self.items)))
         self.count_page.configure(text='' if cube else tr('count.page', page=self.page() + 1, n=n))
-        ch = self.char
-        self.char_label.configure(text=tr('status.char', name=ch['name'], cls=CLASSES[ch['cls']], level=ch['level'],
-                                          str=ch['strength'], dex=ch['dexterity']) if ch else
-                                  tr('status.char_error', error=self.char_error) if self.char_error else tr('status.no_char'))
+        # personnage : seulement s'il manque ou ne se lit pas (classe, niveau, attributs : feuille de statistiques)
+        self.char_label.configure(text='' if self.char else tr('status.char_error', error=self.char_error)
+                                  if self.char_error else tr('status.no_char'))
         self.status.configure(text=tr('status.hint' if self.box.writable else
                                       'status.cube_readonly' if self.box.key == 'cube' else 'status.hint_readonly'))
 

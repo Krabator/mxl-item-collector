@@ -272,6 +272,234 @@ def character_sheet(ctx):
     ctx.expect('plafonds (bonus 0, 10, 100)', caps, [50, 60, 80])
 
 
+@case('Personnage', 'statistiques totales comparées à la feuille de personnage de Kalidor en jeu (paladin niveau 113, Hell)')
+def character_sheet_kalidor(ctx):
+    """Kalidor au 11/10 (trois pages de statistiques en jeu, fichier copié juste après) : attributs, vie / mana,
+    résistances cumulées, vitesses, découvertes, dégâts contre démons / morts-vivants, passives au 2e passage (Grit 24 %
+    avec Dragon's Blessing : 15 % au 1er passage), résistances affichées et Poison Length Reduction (pénalité de Hell
+    -70 %, plafond 75 %), défense (charmes du sac compris : Visions of Akarat +250, Horazon's Focus -50). Pierce feu :
+    -661 = Consecration -666 (« You deal no fire damage ») + Sunstone of the Twin Seas +5, valeur réelle du jeu ; la
+    feuille affiche -251 car chaque source est transmise à l'affichage sur 9 bits signés (SendBits de itemstatcost :
+    -256 à 255) : -666 -> -256, + 5 (11/10)."""
+    from mxl_char_stats import CharacterStats
+    data = ctx.data
+    ch = load_character(os.path.join(FIXTURES, 'character_sheet_kalidor', 'Kalidor.d2s'), data)
+    cs = CharacterStats(ch, data)
+    got = {'Strength': cs.attribute(0), 'Dexterity': cs.attribute(2), 'Vitality': cs.attribute(3), 'Energy': cs.attribute(1),
+           'Life': int(cs.max_life()), 'Mana': int(cs.max_mana()), 'Stamina': int(cs.max_stamina())}
+    got.update({k: cs.stat(*sid) for k, sid in {
+        'Life %': (76,), 'Mana %': (77,), 'All Skill Levels': (127,), 'Class Skill Levels': (83, ch['cls']),
+        'Fire Res': (39,), 'Cold Res': (43,), 'Lightning Res': (41,), 'Poison Res': (45,), 'Magic Res': (37,),
+        'Physical Res': (36,), 'Bonus to Defense': (171,), 'Attack Speed': (93,), 'Cast Speed': (105,), 'Block Speed': (102,),
+        'Hit Recovery': (99,), 'Movement': (96,), 'Magic Find': (80,), 'Gold Find': (79,), 'Experience': (85,),
+        'Light Radius': (89,), 'Crushing Blow': (136,), 'Deadly Strike': (141,), 'Damage to Demons': (121,),
+        'Damage to Undead': (122,), 'Attack Rating %': (119,), 'Spell Focus': (485,), 'Fire Pierce': (333,),
+        'Lightning Pierce': (334,),
+        'Cold Pierce': (335,), 'Poison Pierce': (336,), 'Life Leech': (60,), 'Mana on Melee Attack': (295,),
+        'Life Regeneration (x10)': (74,), 'Mana Regeneration %': (27,), 'Grit %': (184,), 'Half Freeze': (118,)}.items()})
+    got['Block Chance'], got['Defense'] = cs.block_chance(), cs.defense()
+    ctx.expect('difficulté, résistances affichées, Poison Length Reduction',
+               (ch['difficulty'], cs.difficulty_penalty(), [cs.shown_resist(s) for s in (39, 43, 41, 45, 37, 110)]),
+               (2, -70, [75, 75, 75, 75, 0, -70]))
+    ctx.expect('pierces affichés (sources bornées à 9 bits signés), Mana on Melee Attack non bornée (6 bits : 100 en jeu)',
+               ([cs.shown_stat(s) for s in (333, 334, 335, 336)], cs.shown_stat(295)), ([-251, 5, 5, 0], 100))
+    # même personnage connecté en Nightmare (11/10, captures en jeu) : pénalité -30, Poison Length Reduction -30 %
+    nm = load_character(os.path.join(FIXTURES, 'character_sheet_kalidor', 'nightmare', 'Kalidor.d2s'), data)
+    cn = CharacterStats(nm, data)
+    ctx.expect('en Nightmare', (nm['difficulty'], cn.difficulty_penalty(), [cn.shown_resist(s) for s in (39, 43, 41, 45, 110)],
+                                cn.defense(), cn.stat(184)), (1, -30, [75, 75, 75, 75, -30], 30324, 24))
+    ctx.expect('feuille de Kalidor', got, {
+        'Strength': 2770, 'Dexterity': 279, 'Vitality': 249, 'Energy': 231, 'Life': 4596, 'Mana': 1191, 'Stamina': 50,
+        'Life %': 3, 'Mana %': 32, 'All Skill Levels': 5, 'Class Skill Levels': 2, 'Fire Res': 255, 'Cold Res': 255,
+        'Lightning Res': 220, 'Poison Res': 155, 'Magic Res': 0, 'Physical Res': 11, 'Bonus to Defense': 60,
+        'Attack Speed': 150, 'Cast Speed': 60, 'Block Speed': 10, 'Hit Recovery': 60, 'Movement': 40, 'Magic Find': 20,
+        'Gold Find': 0, 'Experience': 42, 'Light Radius': 11, 'Crushing Blow': 12, 'Deadly Strike': 0,
+        'Damage to Demons': 610, 'Damage to Undead': 400, 'Attack Rating %': 350, 'Spell Focus': 25, 'Fire Pierce': -661,
+        'Lightning Pierce': 5, 'Cold Pierce': 5, 'Poison Pierce': 0, 'Life Leech': 40, 'Mana on Melee Attack': 100,
+        'Life Regeneration (x10)': 400, 'Mana Regeneration %': 54, 'Grit %': 24, 'Half Freeze': 1, 'Block Chance': 0, 'Defense': 30324})
+
+
+@case('Personnage', 'statistiques totales comparées à la feuille de personnage de Pala en jeu (paladin niveau 150, objets Sacred)')
+def character_sheet_pala(ctx):
+    """Pala au 11/10 (trois pages de statistiques en jeu, fichier copié juste après) : exigences des objets Sacred
+    remplies par les attributs totaux, objets compris (lues dans la sauvegarde : Force 136, 9 objets portés sur 12
+    ignorés), auras des objets au 2e passage avec les attributs finaux et vie en 256es (Azurewrath : -230 × Vitalité
+    256es de vie, dégâts de froid selon la Vitalité), résistances au plafond absolu de 90 %, physique au plafond de 50 %,
+    absorption fixe / %, pierces affichés (sources bornées à 9 bits signés)."""
+    from mxl_char_stats import CharacterStats
+    data = ctx.data
+    ch = load_character(os.path.join(FIXTURES, 'character_sheet_pala', 'Pala.d2s'), data)
+    cs = CharacterStats(ch, data)
+    s = cs.stat
+    got = {'Strength': cs.attribute(0), 'Dexterity': cs.attribute(2), 'Vitality': cs.attribute(3), 'Energy': cs.attribute(1),
+           'Attributes %': [s(359), s(360), s(362), s(361)], 'Life': int(cs.max_life()), 'Mana': int(cs.max_mana()),
+           'Life / Mana %': [s(76), s(77)], 'Resistances': [cs.shown_resist(x) for x in (39, 43, 41, 45)],
+           'Physical / Magic': [cs.shown_resist(36), cs.shown_resist(37)], 'Block Chance': cs.block_chance(),
+           'Grit': s(184), 'Defense': cs.defense(), 'All / Class Skills': [s(127), s(83, ch['cls'])],
+           'Fire / Cold / Lightning Damage': [(s(48), s(49)), (s(54), s(55)), (s(50), s(51))],
+           'W. Physical / Innate Ele': [s(25), s(484)], 'Crushing / Deadly': [s(136), s(141)],
+           'Demons / Undead': [s(121), s(122)], 'Attack Rating %': s(119),
+           'Spell Damage F/C/L/P': [s(x) for x in (329, 331, 330, 332)], 'Spell Focus': s(485),
+           'Pierce F/C/L/P': [cs.shown_stat(x) for x in (333, 335, 334, 336)],
+           'Speeds A/C/B/HR/M': [s(x) for x in (93, 105, 102, 99, 96)],
+           'Summons Damage / AR / Life / Resists': [s(470), s(500), s(444), s(487)], 'Bonus to Defense': s(171),
+           'Evade / Dodge / Avoid': [s(338), s(339), s(340)], 'Stacked F/C/L/P': [s(x) for x in (39, 43, 41, 45)],
+           'Stacked Magic / Physical': [s(37), s(36)], 'Absorb F/C/L/M': [s(x) for x in (143, 149, 145, 147)],
+           'Absorb % F/C/L/M': [s(x) for x in (142, 148, 144, 146)], 'PDR / EDR': [s(34), s(35)],
+           'Curse / Poison Length': [s(109), cs.shown_resist(110)], 'Half Freeze / Cannot Be Frozen': [s(118), s(153)],
+           'Life Regen (x10) / Mana Regen %': [s(74), s(27)], 'Leech': [s(60), s(62)],
+           'Striking / Kill': [s(208), s(209), s(86), s(138)],
+           'MF / GF / Exp / Light': [s(80), s(79), s(85), s(89)], 'Slow Target / Attacker': [s(150), s(363)]}
+    ctx.expect('feuille de Pala', got, {
+        'Strength': 2287, 'Dexterity': 2862, 'Vitality': 12225, 'Energy': 2076, 'Attributes %': [181, 200, 422, 181],
+        'Life': 28646, 'Mana': 6524, 'Life / Mana %': [27, 87], 'Resistances': [90, 90, 90, 90],
+        'Physical / Magic': [50, 0], 'Block Chance': 9, 'Grit': 11, 'Defense': 80705, 'All / Class Skills': [29, 8],
+        'Fire / Cold / Lightning Damage': [(100, 150), (14534, 14784), (200, 300)], 'W. Physical / Innate Ele': [163, 29],
+        'Crushing / Deadly': [23, 10], 'Demons / Undead': [435, 390], 'Attack Rating %': 270,
+        'Spell Damage F/C/L/P': [90, 115, 115, 90], 'Spell Focus': 80, 'Pierce F/C/L/P': [-221, 150, -206, -226],
+        'Speeds A/C/B/HR/M': [73, 35, 35, 63, 140], 'Summons Damage / AR / Life / Resists': [13, 0, 20, 30],
+        'Bonus to Defense': 210, 'Evade / Dodge / Avoid': [5, 5, 5], 'Stacked F/C/L/P': [365, 295, 295, 300],
+        'Stacked Magic / Physical': [0, 85], 'Absorb F/C/L/M': [0, 5, 5, 0], 'Absorb % F/C/L/M': [8, 8, 8, 0],
+        'PDR / EDR': [94, 0], 'Curse / Poison Length': [0, -20], 'Half Freeze / Cannot Be Frozen': [1, 3],
+        'Life Regen (x10) / Mana Regen %': [3600, 54], 'Leech': [15, 10], 'Striking / Kill': [0, 1, 50, 0],
+        'MF / GF / Exp / Light': [103, 33, 75, 16], 'Slow Target / Attacker': [29, 0]})
+
+
+@case('Personnage', "dégâts physiques de l'arme comparés à la feuille de Kalidor en jeu (Attack, niveau 115)")
+def weapon_damage(ctx):
+    """Kalidor au 11/10, compétence gauche Attack (page 1 de la feuille : Damage 2519-4011) : Faithshaker éthérée
+    (infobulle 255 to 396 avec +240 % et +50 max), +10 max d'un autre objet, W. Physical Damage 390 %, Str. Damage
+    Bonus 498 % (Force 2 770 × 0,18) : (255 / 406) × (100 + 390 + 498) / 100. Même personnage sans un charme de +30 %
+    W. Physical Damage : 2442-3889. Autres valeurs de ses captures : vie 4 663, mana 1 210, Grit 23 %."""
+    from mxl_char_stats import CharacterStats
+    data = ctx.data
+    ch = load_character(os.path.join(FIXTURES, 'weapon_damage', 'Kalidor.d2s'), data)
+    cs = CharacterStats(ch, data)
+    ctx.expect('arme, bonus de Force / Dextérité, W. Physical Damage, dégâts',
+               (cs.weapon()['code'].strip(), cs.damage_bonus(), cs.stat(25), cs.weapon_damage()), ('5@C', (498, 0), 390, (2519, 4011)))
+    d = cs.weapon_damage_detail()
+    ctx.expect('détail : base, éthérée, ED, plats de l\'arme, infobulle, plats des autres objets, dégâts',
+               (d['base'], d['ethereal'], d['ed'], d['after_ed'], d['weapon_flat'], d['tooltip'],
+                [(k, v) for k, _, v in d['flat']], d['damage']),
+               ((60, 82), (75, 102), 240, (255, 346), (0, 50), (255, 396), [('item', (0, 10))], (255, 406)))
+    data_skill = lambda ref: data.skill(ref)
+    ctx.expect('détail : sources du multiplicateur (W. Physical par source, bonus de Force), total, résultat',
+               ([(k, data_skill(r) if k in ('aura', 'passive') else None, v) for k, r, v in d['percent']
+                 if k not in ('item',)], sum(v for k, _, v in d['percent'] if k == 'item'), d['multiplier'], d['result']),
+               ([('base', None, 100), ("passive", "Dragon's Blessing", 150), ('passive', 'Consecration', 150),
+                 ('strength', None, 498)], 90, 988, (2519, 4011)))
+    ctx.expect('sources de W. Physical Damage : somme = total', sum(v for _, _, v in cs.sources(25)), 390)
+    cs.totals[(25, None)] -= 30
+    ctx.expect('sans le charme de +30 %', cs.weapon_damage(), (2442, 3889))
+    cs.totals[(25, None)] += 30
+    ctx.expect('vie, mana, Grit', (int(cs.max_life()), int(cs.max_mana()), cs.stat(184)), (4663, 1210, 23))
+    # autre jeu d'armes (onglet I, emplacements 11 et 12) : Auto Da Fe et Heraldic Shield, sans Faithshaker (+75 Force)
+    other = CharacterStats(ch, data, other_set=True)
+    hands = sorted(it['equipped'] for it in other.items if it['location'] == 1 and it['equipped'] in (4, 5, 11, 12))
+    ctx.expect("autre jeu d'armes : emplacements, arme, Force sans Faithshaker",
+               (hands, other.weapon()['code'].strip(), other.attribute(0) < cs.attribute(0), other.weapon_damage() != cs.weapon_damage()),
+               ([11, 12], '8@8', True, True))
+    nude = CharacterStats(dict(ch, items=[it for it in ch['items'] if it is not cs.weapon()]), data)
+    ctx.expect('sans arme', (nude.weapon(), nude.weapon_damage(), nude.damage_bonus()), (None, None, (0, 0)))
+
+
+@case('Personnage', "deux armes (simulées) : dégâts et éléments par arme, main gauche puis main droite")
+def two_weapons(ctx):
+    """Pala (11/10) avec Demhe (War Scepter, son arme du jeu II) en main gauche à la place de son bouclier, Azurewrath en
+    main droite : ordre gauche puis droite ; dégâts plats et élémentaires propres à chaque arme (règle de Diablo II
+    supposée, pas encore vérifiée en jeu) ; avec une seule arme, résultat inchangé."""
+    from mxl_char_stats import CharacterStats
+    from mxl_containers import place
+    from mxl_tooltip import all_stats
+    data = ctx.data
+    ch = load_character(os.path.join(FIXTURES, 'character_sheet_pala', 'Pala.d2s'), data)
+    single = CharacterStats(ch, data)
+    shield = next(it for it in ch['items'] if place(it) == 'equipped' and it['equipped'] == 5)
+    other = next(it for it in ch['items'] if place(it) == 'equipped' and it['equipped'] == 11)
+    dual = CharacterStats(dict(ch, items=[it for it in ch['items'] if it is not shield and it is not other]
+                               + [dict(other, equipped=5)]), data)
+    left, right = dual.weapons()
+    own = lambda it, sid: sum(s['value'] for s in all_stats(it, data) if s['id'] == sid)
+    ctx.expect('une arme : la sienne', ([w['code'].strip() for w in single.weapons()], single.weapon()['code'].strip()),
+               (['14@'], '14@'))
+    ctx.expect('deux armes : gauche puis droite', ([w['equipped'] for w in (left, right)], left['code'].strip(),
+                                                   right['code'].strip()), ([5, 4], '32@', '14@'))
+    el_l, el_r = dual.weapon_elemental(left), dual.weapon_elemental(right)
+    ctx.expect("froid propre à chaque arme (Azurewrath : 300-450), commun : le reste",
+               (el_r[54] - el_l[54], el_r[55] - el_l[55]), (own(right, 54) - own(left, 54), own(right, 55) - own(left, 55)))
+    dl, dr = dual.weapon_damage_detail(left), dual.weapon_damage_detail(right)
+    ctx.expect("dégâts plats d'une arme absents de l'autre",
+               (any(ref is right for _, ref, _ in dl['flat']), any(ref is left for _, ref, _ in dr['flat'])), (False, False))
+
+
+@case('Personnage', "facture d'un élément de l'arme : dégâts ajoutés, dégâts innés terme par terme (froid d'Azurewrath)")
+def element_invoice(ctx):
+    """Pala (11/10), froid 14 534 - 14 784 en jeu : ajoutés Neutrality Pact, Stareye's Claws, Azurewrath (500 - 750) ;
+    compétence cachée 1959 d'Azurewrath : 49 % de la Dextérité (attribut de sa ligne innée : « Weapon innate ») × (100
+    + 29 % Innate Ele Damage) = 1 809, 100 % de la Vitalité (autre attribut : « Weapon synergy ») = 12 225, sans Innate
+    Ele Damage. Arme sans ligne innée (Auto Da Fe) : pas de dégâts innés."""
+    from mxl_char_stats import CharacterStats
+    data = ctx.data
+    ch = load_character(os.path.join(FIXTURES, 'character_sheet_pala', 'Pala.d2s'), data)
+    cs = CharacterStats(ch, data)
+    d = cs.element_detail(cs.weapon(), 54, 55)
+    ctx.expect('dégâts ajoutés', (sorted(v for _, _, v in d['added']), d['added_total']),
+               ([(100, 150), (100, 150), (300, 450)], (500, 750)))
+    ctx.expect('dégâts innés : compétence, termes, total, résultat',
+               [(s_['skill'], s_['terms'], s_['total']) for s_ in d['innate']] + [d['result']],
+               [(1959, [(2, 49.0, 'innate', 1402, 1809), (3, 100.0, 'synergy', 12225, 12225)], (14034, 14034)), (14534, 14784)])
+    ctx.expect('élément sans dégâts innés (feu)', [s_['skill'] for s_ in cs.element_detail(cs.weapon(), 48, 49)['innate']], [])
+    # passive ordinaire (dégâts fixes, pas de % × attribut) : avec les dégâts ajoutés, pas en dégâts innés (Kalidor,
+    # jeu d'armes I : Auto Da Fe, Bonebreaker sans dégât inné ; feu 28 - 44 de la passive Ignis Fatuus)
+    kal = load_character(os.path.join(FIXTURES, 'weapon_damage', 'Kalidor.d2s'), data)
+    other = CharacterStats(kal, data, other_set=True)
+    d = other.element_detail(other.weapon(), 48, 49)
+    ctx.expect('passive Ignis Fatuus : dégâts ajoutés', ([(k, data.skill(r), v) for k, r, v in d['added']], d['innate'], d['result']),
+               ([('passive', 'Ignis Fatuus', (28, 44))], [], (28, 44)))
+
+
+@case('Personnage', 'mercenaires comparés à leur feuille en jeu (Sharyn : Hell, Nightmare ; Debi : Normal), plafonds')
+def mercenary_sheet(ctx):
+    """Feuilles des mercenaires en jeu (11/10) : Sharyn, Rogue Priestess niveau 112 de Kalidor (Hell, puis Nightmare :
+    résistances au plafond 76 % = 75 + (112 − 100) / 10), Debi, Rogue Priestess niveau 27 de Nekratall (Normal) :
+    attributs (Énergie innée (niveau + 4) × 6), vie (Vitalité sans effet), défense de base de hireling.bin, résistances
+    (Resist 70 + par niveau, pénalité de difficulté), Physical Resist innée (niveau / 4 + objets), nom, sous-classe.
+    Plafonds (D2Game.dll 0x6fcfb3c0, 90 % écrit par D2Sigma) : 75 % + maximum, au plus 90 % ; magie : maximum 38 ;
+    physique : 50 %. Tous les types de hireling.bin : nom et sous-classe trouvés dans string.tbl."""
+    from mxl_char_stats import MercenaryStats, CharacterStats
+    data = ctx.data
+
+    def sheet(path):
+        ch = load_character(os.path.join(FIXTURES, *path), data)
+        m = MercenaryStats(ch['mercenary'], data, ch['difficulty'])
+        return (m.name(), m.subclass(), m.act(), m.char['level'], m.attribute(0), m.attribute(2), m.attribute(1),
+                int(m.max_life()), m.defense(), [m.shown_resist(s) for s in (39, 43, 41, 45)], m.resist_cap(39),
+                m.shown_resist(36), m.stat(80))
+    ctx.expect('Sharyn (Hell)', sheet(('character_sheet_kalidor', 'Kalidor.d2s')),
+               ('Sharyn', 'Priestess', 1, 112, 483, 1023, 767, 5628, 4589, [53, 53, 68, 53], 76, 31, 8))
+    ctx.expect('Sharyn (Nightmare)', sheet(('character_sheet_kalidor', 'nightmare', 'Kalidor.d2s'))[9:11], ([76] * 4, 76))
+    ctx.expect('Debi (Normal)', sheet(('character_sheet_mercenary', 'Nekratall.d2s')),
+               ('Debi', 'Priestess', 1, 27, 134, 259, 203, 756, 594, [75] * 4, 75, 6, 0))
+    names = {}
+    for r in data.hirelings:
+        m = MercenaryStats(dict(type=r['id'], name_id=0, experience=0, items=[]), data)
+        names[r['id']] = (m.act(), m.subclass(), bool(m.name()) and not m.name().lower().startswith('merc'))
+    ctx.expect('actes et sous-classes des 30 types', sorted(set(names.values())), sorted({
+        (1, 'Ranger', True), (1, 'Priestess', True), (2, 'Exemplar', True), (2, 'Shapeshifter', True),
+        (2, 'Fighter Mage', True), (3, 'Necrolyte', True), (3, 'Bloodmage', True), (3, 'Abjurer', True),
+        (5, 'Barbarian', True)}))
+    ctx.expect('nombre de types', len(names), 30)
+    cs = CharacterStats(dict(cls=4, level=40, skills={}, items=[], base_stats={}), data)
+    caps = []
+    for sid, bonus in ((40, 0), (40, 10), (40, 30), (38, 5), (38, 40)):
+        cs.totals[(sid, None)] = bonus
+        caps.append(cs.resist_cap(39 if sid == 40 else 37))
+    ctx.expect('plafonds : 75, 85, 90 au plus ; magie 80, 90 au plus', caps, [75, 85, 90, 80, 90])
+    cs.totals.update({(39, None): 200, (36, None): 70, (37, None): 120})
+    ctx.expect('affichées : feu 90, physique 50, magie 90 (sans pénalité)',
+               [cs.shown_resist(s) for s in (39, 36, 37)], [90, 50, 90])
+
+
 @case('Personnage', "opérations de itemstatcost (par niveau, % d'attribut, % de vie) et auras données par les objets")
 def character_stat_ops(ctx):
     """Règles du jeu (D2Common.dll 0x6fd89530), calculées à la main : personnage niveau 40 (vie / mana enregistrées

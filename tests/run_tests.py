@@ -38,7 +38,7 @@ from mxl_ext import editor
 for _module in ('test_display_writes', 'test_character', 'test_quality_install', 'test_settings_rebuild', 'test_library',
                 'test_collection', 'test_documentation'):
     importlib.import_module(_module)   # chaque fichier enregistre ses cas (@case)
-GUI_TESTS = ('smoke', 'drag', 'library', 'transfer', 'shared', 'xfer', 'cube', 'inventory', 'bag', 'nocube')
+GUI_TESTS = ('smoke', 'drag', 'library', 'transfer', 'shared', 'xfer', 'cube', 'inventory', 'bag', 'nocube', 'stats')
 for _test in GUI_TESTS:
     case('Interface', _test)(gui_case(_test))
 EDITOR_TESTS = os.path.join(ROOT, 'mxl_editor', 'tests')

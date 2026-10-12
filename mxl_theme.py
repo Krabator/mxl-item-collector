@@ -42,6 +42,10 @@ DETAIL_DIM, SECTION, BAD, HIDDEN = '#7a7a7a', '#b0b0b0', '#ff5555', '#666666'
 # #444444 dans le thème darkly, trop proche du fond (#222222) ; gris clair, pas blanc (texte normal : #d0d0d0 à #ffffff)
 LABEL_DIM = '#9a9a9a'
 SELECTION = '#ffffff'   # objet sélectionné : fond éclairci vers le blanc
+# feuille de statistiques (mxl_stats_view) : fond, cases, en-têtes de tableau, filets des cases, libellés (or des
+# titres du jeu), valeurs, dégâts magiques, valeur comprenant un bonus inné du mercenaire
+STATS_BG, STATS_CELL, STATS_HEAD, STATS_LINE = '#000000', '#121212', '#1d1a12', '#34302a'
+STATS_LABEL, STATS_VALUE, STATS_MAGIC, STATS_INNATE = '#c7b377', '#ececec', '#d9a441', '#7fa7ff'
 # glisser-déposer : surbrillance des cases visées (RGBA) et contour, dépôt possible / impossible
 DROP_OK, DROP_KO = ((255, 255, 255, 55), '#ffffff'), ((255, 60, 60, 70), '#ff5050')
 

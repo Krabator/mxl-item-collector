@@ -15,6 +15,9 @@ outils (app, root, check…) ; sans lui, les parties d'édition vérifient seule
 - library : écran « Library » (découverte à l'ouverture d'un coffre, 2 022 entrées, recherche, filtre, tri,
   traduction) ;
 - transfer : transfert vers la collection (aperçu, option C, destruction, restauration), consultation et sortie ;
+- stats : feuille de statistiques (bouton « Stats ») à la place du panneau du personnage, pages de hauteur fixe (page
+  Skill : calcul des dégâts de Attack),
+  mercenaire (trois pages, sans Vitalité), invocations grisées, retour à l'équipement ;
 """
 import sys, os, glob, shutil, tempfile, ctypes
 # dossier de l'utilisateur des tests (sauvegardes .bak) : temporaire et vierge à chaque test
@@ -1038,6 +1041,122 @@ def bag():
     finish()
 
 
+# ---------------------------------------------------------------- stats
+def sheet_texts():
+    """Textes des étiquettes de la feuille de statistiques affichée."""
+    out, todo = [], [app.stats_view.sheet]
+    while todo:
+        w_ = todo.pop()
+        todo.extend(w_.winfo_children())
+        if w_.winfo_class() == 'Label':
+            out.append(str(w_.cget('text')))
+    return out
+
+
+def stats():
+    import mxl_stats_view
+    v = app.stats_view
+    check(not app.show_stats.get() and not v.frame.winfo_ismapped(), "feuille de statistiques affichée à l'ouverture")
+    show_equipment()
+    sizes = []   # tailles successives de la fenêtre au clic : une seule (pas de clignotement pendant la mesure)
+    bind = root.bind('<Configure>', lambda e: e.widget is root and sizes.append((e.width, e.height)), add='+')
+    app.btn_stats.invoke()
+    root.update()
+    root.unbind('<Configure>', bind)
+    check(len(set(sizes)) <= 1, f'Stats : la fenêtre change de taille plusieurs fois (clignotement) : {sizes}')
+    check(v.frame.winfo_ismapped() and not app.char_view.frame.winfo_ismapped() and not app.show_char.get(),
+          "Stats : le panneau du personnage n'est pas remplacé")
+    check(v.btn_who['summons'].instate(['disabled']) and not v.btn_who['mercenary'].instate(['disabled']),
+          'onglets : Summons grisé, Mercenary actif')
+    heights = set()
+    check(v.btn_pages[5].instate(['disabled']), 'bouton Skill actif (grisé pour l\'instant)')
+    for n in (1, 2, 3, 4):   # Skill (5) grisé
+        v.btn_pages[n].invoke()
+        root.update()
+        heights.add(v.sheet.winfo_height())
+        t = sheet_texts()
+        check(any(x.startswith('Nekratall  ·  Necromancer  ·  level ') for x in t), f'page {n} : titre {t[:1]}')
+        want = {1: ('Strength', 'Vitality', 'Block Chance'), 2: ('% Bonus', 'Spell Focus'), 3: ('Stacked Resists', 'Leech'),
+                4: ('Summon Life', 'Magic Find'), 5: ('Base damage', '= Weapon tooltip', '= Multiplier')}[n]
+        check(all(x in t for x in want), f'page {n} : {want} absents')
+    check(len(heights) == 1, f'hauteur de la feuille changée selon la page : {heights}')
+    # survol de Physical Damage (page General) : facture dans une infobulle, assez large, retirée en quittant la case
+    v.btn_pages[2].invoke()
+    root.update()
+    tip = v.damage_tip
+    tip.cell.event_generate('<Enter>')
+    root.update()
+    texts = []
+    todo = [tip.win] if tip.win else []
+    while todo:
+        w_ = todo.pop()
+        todo.extend(w_.winfo_children())
+        if w_.winfo_class() == 'Label':
+            texts.append(str(w_.cget('text')))
+    check(tip.win is not None and tip.win.winfo_ismapped() and all(x in texts for x in
+          ('Base damage', '= Weapon tooltip', '= Multiplier')) and 'Average per hit' not in texts,
+          f'infobulle de Physical Damage : {texts[:8]}')
+    check(tip.win is not None and tip.win.winfo_width() >= mxl_stats_view.TIP_MIN_WIDTH,
+          'infobulle de Physical Damage trop étroite')
+    tip.cell.event_generate('<Leave>')
+    root.update()
+    check(tip.win is None, "infobulle de Physical Damage restée affichée")
+    v.btn_pages[4].invoke()
+    root.update()
+    # onglet I / II du panneau Equipment : la feuille compte les armes de l'onglet affiché
+    app.btn_char.invoke()
+    root.update()
+    ch_ = app.char
+    active = 2 if ch_['weapon_switch'] else 1
+    app.char_view.weapon_set = 3 - active
+    app.btn_stats.invoke()
+    v.btn_pages[2].invoke()
+    root.update()
+    t = sheet_texts()
+    other = 'WEAPON  ·  SET ' + 'I' * (3 - active)
+    check(v.other_set() and other in t, f"onglet {3 - active} du panneau Equipment : feuille {[x for x in t if 'SET' in x]}")
+    app.btn_char.invoke()
+    app.char_view.weapon_set = active
+    app.btn_stats.invoke()
+    v.btn_pages[4].invoke()
+    root.update()
+    check(not v.other_set(), "retour à l'onglet du jeu actif")
+    t = sheet_texts()
+    from mxl_char_stats import character_stats
+    cs = character_stats(app.char, app.data)
+    check(f'{cs.stat(444)}%' in t, 'page 4 : Summon Life')
+    v.btn_who['mercenary'].invoke()
+    root.update()
+    m = v.mercenary()
+    t = sheet_texts()
+    check(m.name() and m.subclass() and any(x.startswith(f'{m.name()}  ·  {m.subclass()}') for x in t), f'mercenaire : titre {t[:1]}')
+    check(sorted(v.btn_pages) == [1, 2, 3], f'mercenaire : pages {sorted(v.btn_pages)}')
+    check('Vitality' not in t and f'{int(m.max_life()):,}' in t, 'mercenaire : Vitalité affichée ou vie absente')
+    v.btn_pages[3].invoke()
+    root.update()
+    t = sheet_texts()
+    check('Leech' in t and 'Mana' not in t, 'mercenaire (mana infinie) : sustain de mana affiché')
+    m_ = v.mercenary()
+    check([x for x in t if x in ('Yes', 'No')] == ['Yes' if m_.stat(118) else 'No', 'Yes' if m_.stat(153) else 'No'],
+          'Half Freeze Duration, Cannot Be Frozen : Yes / No')
+    v.btn_pages[2].invoke()
+    root.update()
+    check('Poison Skill Duration' in sheet_texts() and 'Innate Ele Damage' in sheet_texts(),
+          "mercenaire : Poison Skill Duration ou Innate Ele Damage absente (procs, effets d'objets)")
+    v.btn_pages[1].invoke()
+    root.update()
+    check(v.sheet.winfo_height() in heights, 'hauteur de la feuille changée pour le mercenaire')
+    app.btn_char.invoke()
+    root.update()
+    check(app.char_view.frame.winfo_ismapped() and not v.frame.winfo_ismapped() and not app.show_stats.get(),
+          "Equipment : la feuille de statistiques reste affichée")
+    app.btn_stats.invoke()
+    root.update()
+    check(v.frame.winfo_ismapped() and not app.char_view.frame.winfo_ismapped(), 'Stats de nouveau : panneau du personnage affiché')
+    check(not errors, f'erreurs : {errors}')
+    finish()
+
+
 # ---------------------------------------------------------------- nocube
 def nocube():
     """Onglet Cube selon le cube Horadrim du personnage : présent (sac ou coffre) = modifiable ; absent avec des objets
@@ -1114,7 +1233,7 @@ TIMEOUT = 120   # secondes : filet de sécurité, les tests durent quelques seco
 root.report_callback_exception = crashed
 root.after(TIMEOUT * 1000, timeout)
 TESTS = {'smoke': smoke, 'drag': drag1, 'library': library, 'transfer': transfer, 'shared': shared, 'xfer': xfer,
-         'cube': cube, 'inventory': inventory, 'bag': bag, 'nocube': nocube}
+         'cube': cube, 'inventory': inventory, 'bag': bag, 'nocube': nocube, 'stats': stats}
 EDITOR_TESTS = os.path.join(os.path.dirname(HERE), 'mxl_editor', 'tests', 'gui_editor_tests.py')
 if EDITOR:   # tests du module : définis ici, avec les outils de ce fichier ; ajoutés à TESTS (et transfer_copy)
     exec(compile(open(EDITOR_TESTS, encoding='utf-8').read(), EDITOR_TESTS, 'exec'))

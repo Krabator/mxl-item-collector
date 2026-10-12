@@ -95,7 +95,9 @@ class Data:
                 op=r[0x54], op_param=r[0x55], op_base=struct.unpack_from('<H', r, 0x56)[0],
                 # stats cibles de l'opération (op stat1-3, u16 @0x58) ; décalage de la valeur en mémoire (ValShift @0x18 :
                 # vie, mana = 8, en 256es)
-                op_stats=tuple(s for s in struct.unpack_from('<3H', r, 0x58) if s != 0xFFFF), shift=r[0x18])
+                op_stats=tuple(s for s in struct.unpack_from('<3H', r, 0x58) if s != 0xFFFF), shift=r[0x18],
+                # envoi au client (feuille de personnage) : SendBits @0x08, signée si drapeau 0x2 (@0x04)
+                send_bits=r[0x08], signed=bool(struct.unpack_from('<I', r, 0x04)[0] & 2))
             self.csv_bits[sid] = r[0x0A]   # largeur des stats du personnage dans le .d2s (Force = 11 bits en MXL)
         # stats de chaque groupe d'affichage (dgrp), dans l'ordre de la table : calculées une fois (chaque infobulle les
         # demande pour chacune de ses stats : les recalculer coûtait les deux tiers du temps de la recherche)
@@ -328,14 +330,20 @@ class Data:
     def _load_hirelings(self):
         """hireling.bin (format D2 1.13c, 0x118 octets par ligne) : une ligne par type de mercenaire (Id u32 @0x04, celui
         de la sauvegarde) et tranche de niveau (Level u32 @0x1C) ; expérience par niveau @0x20 ; vie @0x24 / par niveau
-        @0x28, défense @0x2C / @0x30, Force @0x34 / @0x38, Dextérité @0x3C / @0x40 (D2Game.dll 0x6fc68d9a)."""
+        @0x28, défense @0x2C / @0x30, Force @0x34 / @0x38, Dextérité @0x3C / @0x40 (D2Game.dll 0x6fc68d9a) ; classe
+        (monstats : 271 Rogue, 338 Desert Guard, 359 Iron Wolf, 561 Barbarian) @0x08 ; résistance @0x5C / par niveau
+        @0x60 (en quarts, D2Sigma.dll 0x10066c10) ; sous-classe @0xD2 (n de la chaîne « strhirespecialN » : Ranger,
+        Priestess…) ; premier nom de la liste des noms (clé de string.tbl, 32 octets) @0xD3."""
         self.hirelings = []
         for r in self._rows('hireling'):
             (ident, level, exp, hp, hp_lvl, df, df_lvl, st, st_lvl, dx, dx_lvl) = (
                 struct.unpack_from('<I', r, 0x04)[0], *struct.unpack_from('<10i', r, 0x1C))
             self.hirelings.append(dict(id=ident, level=level, exp_per_level=exp, life=hp, life_per_level=hp_lvl,
                                        defense=df, defense_per_level=df_lvl, strength=st, strength_per_level=st_lvl,
-                                       dexterity=dx, dexterity_per_level=dx_lvl))
+                                       dexterity=dx, dexterity_per_level=dx_lvl, cls=struct.unpack_from('<I', r, 0x08)[0],
+                                       resist=struct.unpack_from('<i', r, 0x5C)[0],
+                                       resist_per_level=struct.unpack_from('<i', r, 0x60)[0], subclass=r[0xD2],
+                                       name_first=r[0xD3:0xF3].split(b'\0')[0].decode('latin1')))
 
     def _load_gems(self):
         """gems.bin : bonus des gemmes et runes par groupe de types d'objets (armes, casques / armures, boucliers)."""
@@ -397,13 +405,17 @@ class Data:
 
     def key(self, k):
         """Texte affiché pour une clé de string.tbl (la clé elle-même si absente)."""
+        i = self.key_index(k)
+        return self.s(i) if i is not None else k
+
+    def key_index(self, k):
+        """Numéro de la chaîne d'une clé de string.tbl (None si absente)."""
         if not hasattr(self, '_bykey'):
             self._bykey = {}
             rank = lambda i: 0 if 10000 <= i < 20000 else 1 if i >= 20000 else 2
             for i, (kk, _) in sorted(self.strings.items(), key=lambda x: (rank(x[0]), x[0])):
                 self._bykey.setdefault(kk, i)
-        i = self._bykey.get(k)
-        return self.s(i) if i is not None else k
+        return self._bykey.get(k)
 
     def color(self, idx):
         """Code couleur (caractère après ÿc) au début d'une chaîne, ou None."""

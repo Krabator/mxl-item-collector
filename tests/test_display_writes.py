@@ -118,6 +118,34 @@ def stash_transfer(ctx):
     ctx.expect('fichiers après refus', (read_file(src) == raw_src, read_file(dst) == raw_dst), (True, True))
 
 
+@case('Affichage', "dégât inné d'une arme : % augmenté par Innate Ele Damage du personnage (capture d'Azurewrath)")
+def innate_damage_bonus(ctx):
+    """Capture en jeu d'Azurewrath portée par Pala (11/10, Innate Ele Damage 29 %, Dextérité 2 862) : « Innate Cold
+    Damage: 1287 (45.1% of Dexterity) » (35 % × 1,29 = 45 % entier pour les dégâts, 45,15 tronqué à l'affichage)."""
+    from mxl_save import load_character
+    from mxl_char_stats import with_total_attributes
+    data = ctx.data
+    ch = load_character(os.path.join(FIXTURES, 'character_sheet_pala', 'Pala.d2s'), data)
+    with_total_attributes(ch, data)
+    w = next(it for it in ch['items'] if it['location'] == 1 and it['equipped'] == 4)
+    lines = [''.join(t for _, t in line) for line in item_tooltip(w, data, ch)]
+    ctx.expect('ligne du dégât inné', [t for t in lines if t.startswith('Innate')],
+               ['Innate Cold Damage: 1287 (45.1% of Dexterity)'])
+
+
+@case('Affichage', "nom complet d'un objet : nom propre — base, une seule fois s'ils sont identiques (charmes)")
+def full_name_once(ctx):
+    """Kalidor (11/10) : Sacred Worldstone Key (unique dont le nom est celui de sa base : affiché une fois, pas
+    « Sacred Worldstone Key — Sacred Worldstone Key ») ; Faithshaker — Hand of God (4) : les deux."""
+    from mxl_save import load_character
+    from mxl_gui_detail import full_name
+    data = ctx.data
+    ch = load_character(os.path.join(FIXTURES, 'weapon_damage', 'Kalidor.d2s'), data)
+    names = {full_name(it, data) for it in ch['items']}
+    ctx.expect('noms', ('Sacred Worldstone Key' in names, 'Faithshaker — Hand of God (4)' in names,
+                        any(' — ' in n and n.split(' — ')[0] == n.split(' — ')[1] for n in names)), (True, True, False))
+
+
 @case('Affichage', "objet éthéré : « Ethereal » en gris après les exigences, avant les stats (capture Glyph Basher)")
 def ethereal_line_position(ctx):
     """Capture en jeu de Glyph Basher (Totem Shield éthéré, coffre partagé) : ... Required Dexterity: 34 / Ethereal /

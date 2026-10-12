@@ -89,10 +89,13 @@ def main_line(name):
 
 def full_name(it, data):
     """Nom complet d'un objet pour la barre du bas, sur une ligne : nom propre (unique, set, rare, runeword) — nom de
-    base, chacun réduit à sa ligne principale (main_line, décision du 08/10)."""
+    base, chacun réduit à sa ligne principale (main_line, décision du 08/10) ; une seule fois s'ils sont identiques
+    (charmes uniques : « Sacred Worldstone Key »)."""
     special = special_name(it, data)
     base = main_line(it['name'])
-    return f"{main_line(special)} — {base}" if special else base
+    if not special or main_line(special) == base:
+        return base
+    return f"{main_line(special)} — {base}"
 
 
 class DetailHost:

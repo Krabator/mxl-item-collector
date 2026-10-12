@@ -84,9 +84,10 @@ class Character(Record):
     compétences à 0 absentes), items (objets du personnage, liste d'Item :
     portés, ceinture, inventaire, cube ; rangement de chacun : mxl_containers.place), corpse (objets restés sur le
     cadavre), mercenary (None ou dict : type, name_id, experience, dead, items), golem (objet du golem de fer ou
-    None), extra_error (erreur de lecture du cadavre / mercenaire / golem, ou None)."""
+    None), extra_error (erreur de lecture du cadavre / mercenaire / golem, ou None), difficulty (difficulté en cours :
+    0 Normal, 1 Nightmare, 2 Hell)."""
     FIELDS = frozenset('name cls level path weapon_switch strength energy dexterity vitality base_stats skills items corpse mercenary golem '
-                       'extra_error'.split())
+                       'extra_error difficulty'.split())
 
 
 class BitReader:

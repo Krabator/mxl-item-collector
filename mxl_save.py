@@ -180,6 +180,9 @@ PANEL_OF = {where: n for n, where in PANELS.items()}   # conteneur -> champ « p
 
 
 WEAPON_SWITCH = 0x10   # en-tête du .d2s : jeu d'armes actif (u32, 0 = I, 1 = II ; ✅ Nekratall, 30/09)
+# en-tête du .d2s : 3 octets (Normal, Nightmare, Hell), bit 7 = difficulté en cours, 4 bits du bas = acte (✅ Kalidor
+# en Hell : 00 00 82 ; Nekratall en Normal : 80 00 00 ; 11/10)
+TOWNS = 0xA8
 
 
 def class_skills(cls, data):
@@ -513,7 +516,8 @@ def load_character(path, data):
     b = read_file(path)
     expect(b, 0, D2S_SIGNATURE)
     ch = Character(name=b[0x14:0x24].split(b'\0')[0].decode('latin1'), cls=b[0x28], level=b[0x2B], path=path,
-                   weapon_switch=struct.unpack_from('<I', b, WEAPON_SWITCH)[0] & 1)
+                   weapon_switch=struct.unpack_from('<I', b, WEAPON_SWITCH)[0] & 1,
+                   difficulty=next((d for d in range(3) if b[TOWNS + d] & 0x80), 0))
     gf = b.find(b'gf')
     expect(b, gf, b'gf')
     br, base = BitReader(b[gf + 2:gf + 2 + 200]), {}

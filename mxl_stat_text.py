@@ -237,22 +237,35 @@ def _grouped_lines(ids, data, add, two_handed=True, ranged=()):
     return done
 
 
+def innate_bonus(char, data):
+    """Innate Ele Damage (stat 484) du personnage : % ajouté aux dégâts innés des armes (0 sans objets lus)."""
+    if not char.get('items') or 'base_stats' not in char:
+        return 0
+    from mxl_char_stats import character_stats
+    return character_stats(char, data).stat(484)
+
+
 def _innate_damage_line(c, v, p, s1, data, char):
     """« Innate Lightning Damage: 5 (13.0% of Strength) » : chaîne 11600 + élément ; dégâts = valeur % × attribut du
     personnage (✅ Throwing Axe, Force 43 ; attribut « Strength » non vérifié ailleurs). param = élément (octet bas :
     0 feu, 1 foudre, 2 froid, 3 poison, 4 magie, 5 tri) + attribut (octet haut : n° de stat 0 Force, 1 Énergie,
     2 Dextérité, 3 Vitalité) ✅ Throwing Axe (1 = foudre / Force), Hexblade (512 = feu / Dextérité).
-    Sans personnage : pas de valeur calculée (✅ documentation : « Innate Tri-Elemental Damage: (54.0% of Dexterity) »)."""
+    Sans personnage : pas de valeur calculée (✅ documentation : « Innate Tri-Elemental Damage: (54.0% of Dexterity) »).
+    Avec un personnage : % augmenté par son Innate Ele Damage (stat 484, innate_bonus) ; dégâts = attribut × % entier
+    / 100, % affiché à une décimale, tronqué (✅ Azurewrath de Pala, 11/10 : 35 % × 1,29 = 45 % -> « 1287 (45.1% of
+    Dexterity) », Dextérité 2 862)."""
     elem, attr = (p or 0) & 0xFF, (p or 0) >> 8
+    bonus = innate_bonus(char, data) if char else 0
+    shown = v * (100 + bonus) // 10 / 10   # % affiché : une décimale, tronqué
     raw = data.strings.get(11600 + elem, ('', s1))[1]
     attr_name = data.isc[attr]['desc'].replace('to ', '', 1) if attr in data.isc else '?'
     have = ATTR_KEYS.get(attr)
     num_col = raw[raw.index('%d') - 1] if '%d' in raw and raw[raw.index('%d') - 3:raw.index('%d') - 1] == 'ÿc' else WHITE
     parts = raw.replace('ÿc0', '').split('%d')
     head = parts[0].replace('ÿc' + num_col, '')
-    tail = parts[1].replace('%.1f%%', f'{v:.1f}%').replace('%s', attr_name)
+    tail = parts[1].replace('%.1f%%', f'{shown:.1f}%').replace('%s', attr_name)
     if char and have:   # pas de plage : sans signification
-        return c['prio'], WHITE, head, [(num_col, str(v * char[have] // 100)), (WHITE, tail)], []
+        return c['prio'], WHITE, head, [(num_col, str(v * (100 + bonus) // 100 * char[have] // 100)), (WHITE, tail)], []
     return c['prio'], WHITE, head, [(WHITE, tail.lstrip())], []
 
 
